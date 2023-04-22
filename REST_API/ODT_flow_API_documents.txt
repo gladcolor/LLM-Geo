@@ -1,0 +1,123 @@
+ODT Flow REST APIs
+Each API performs a specific task such as aggregating the flows for a selected place and
+downloading flow data for a selected geographic area. All APIs return data in CSV
+(comma-separated values) format. The API is specified in the “operation” parameter in
+the request (see examples below).
+APIs
+▪ get_flow_by_place
+Return the aggregated movement between the selected place and other places.
+▪ get_daily_movement_by_place
+Return the daily inter-unit movements between the selected place and other places or the
+selected place's daily intra-unit movements.
+▪ get_daily_movement_for_all_places
+Return the daily movements for all places of a specific geographic level (currently return intra
+movement).
+▪ extract_odt_data
+Return the selected OD flows in either temporally aggregated format or daily format. The study
+area can be specified by a bbox. For SafeGraph daily flows, the days selected need be less than
+31.
+▪ extract_odt_data_url
+Same as extract_odt_data, but returns a download URL and number of records instead of
+directly returning the csv data. Works better for extracting large amounts of flows.
+API Parameters
+• source
+▪ twitter
+▪ safegraph
+• scale
+For twitter:
+▪ world_country
+▪ world_first_level_admin
+▪ us_state
+▪ us_county
+For safegraph:
+▪ us_state
+▪ us_county
+▪ us_tract_tx
+▪ us_tract_sc
+• place
+The selected place id for the query.
+• For US county, use five-digit county FIPS as the place id;
+• For US state, use two-digit state FIPS;
+• For world countries/territories, use the ISO code (e.g., USA, ITA).
+• For the first-level subdivisions of world countries/territories, use ISO code (e.g.,
+USA.41_1).
+• direction
+Indicates the flow direction. Possible values:
+• outflow: Population flows from the selected place to other places in the selected
+ODT cube.
+• inflow: Population flows from the other places to the selected places in the selected
+ODT cube.
+• both: Include both inflow and outflow in the selected ODT cube.
+• intra: Population flows within the selected place. (this is only for
+get_daily_movement_by_place operation).
+• begin & end
+Available time period for Twitter: from 01/01/2019 – 12/31/2019, 01/01/2020 – 12/31/2020.
+Available time period for SafeGraph: from 01/01/2019 – 12/31/2019, 01/01/2020 –
+02/24/2021.
+For the od_daily_movement_by_place operation, begin and end can cross multiple years. Other
+operations need to be within same year.
+• bbox
+Specify the area of interest. Only for the operations of extract_odt_data and
+extract_odt_data_url.
+Format: south, north, west, east. Examples:
+• 20.193,49.331,-125.195,-64.101
+• -90,90,-180,180
+• type
+Indicate the type of data to be downloaded. Only for the operations of extract_odt_data
+and extract_odt_data_url.
+▪ aggregated
+▪ daily
+Query Examples
+All queries return data in CSV format.
+• get_flow_by_place
+Return the aggregated movement between the selected place and other places.
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_flow_by_place&source=twitter&scale=
+us_state&place=54&begin=01/01/2020&end=01/10/2020&direction=both
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_flow_by_place&source=safegraph&sca
+le=us_tract_sc&place=48113007604&begin=01/01/2020&end=03/31/2020&direction=both
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_flow_by_place&source=twitter&scale=
+world_first_level_admin&place=USA.41_1&begin=01/01/2020&end=03/31/2020&direction=inf
+low
+• get_daily_movement_by_place
+Return the daily inter-unit movements between the selected place and other places or
+the selected place's daily intra-unit movements.
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_by_place&source=sa
+fegraph&scale=us_county&place=12086&begin=01/01/2020&end=01/30/2020&direction=both
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_by_place&source=sa
+fegraph&scale=us_tract_sc&place=45063020505&begin=01/01/2020&end=01/30/2020&directi
+on=inflow
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_by_place&source=tw
+itter&scale=world_country&place=USA&begin=01/01/2020&end=01/30/2020&direction=outfl
+ow
+• get_daily_movement_for_all_places
+Return the daily movements for all places of a specific geographic level (currently return
+intra movement).
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_for_all_places&sourc
+e=twitter&scale=us_state&begin=11/01/2019&end=03/10/2020
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_for_all_places&sourc
+e=safegraph&scale=us_county&begin=01/01/2020&end=02/01/2020
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=get_daily_movement_for_all_places&sourc
+e=twitter&scale=world_first_level_admin&begin=01/01/2020&end=02/01/2020
+• extract_odt_data
+Return the selected OD flows in either temporally aggregated format or daily format.
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=extract_odt_data&source=twitter&scale=u
+s_county&begin=01/01/2019&end=01/02/2019&bbox=20.19346,49.33148,-125.19531,-
+64.10156&type=daily
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=extract_odt_data&source=safegraph&scale
+=us_tract_sc&begin=01/01/2019&end=01/02/2019&bbox=20.19346,49.33148,-125.19531,-
+64.10156&type=aggregated
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=extract_odt_data&source=twitter&scale=w
+orld_first_level_admin&begin=01/01/2019&end=01/02/2019&bbox=20.19346,49.33148,-
+125.19531,-64.10156&type=aggregated
+• extract_odt_data_url
+Same as extract_odt_data, but returns a download URL and number of records instead of
+directly returning the csv data.
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=extract_odt_data_url&source=twitter&scal
+e=us_county&begin=01/01/2019&end=01/02/2019&bbox=20.19346,49.33148,-125.19531,-
+64.10156&type=daily
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=extract_odt_data_url&source=safegraph&s
+cale=us_tract_sc&begin=01/01/2019&end=01/02/2019&bbox=20.19346,49.33148,-
+125.19531,-64.10156&type=aggregated
+http://gis.cas.sc.edu/GeoAnalytics/REST?operation=extract_odt_data_url&source=twitter&scal
+e=world_first_level_admin&begin=01/01/2019&end=01/02/2019&bbox=20.19346,49.33148,-
+125.19531,-64.10156&type=aggregated
