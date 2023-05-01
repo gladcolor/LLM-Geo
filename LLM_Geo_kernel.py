@@ -100,8 +100,12 @@ class Solution():
     @property
     def operation_node_names(self):
         opera_node_names = []
-        opera_node_names = [oper['node_name'] for oper in self.operations]
+        for node_name in self.solution_graph.nodes():
+            node = self.solution_graph.nodes[node_name]
+            if node['node_type'] == 'operation':
+                opera_node_names.append(node['node_name'])
         return opera_node_names
+
     def get_ancestor_operations(self, node_name):
         ancestor_operation_names = []
         ancestor_node_names = nx.ancestors(self.solution_graph, node_name)
@@ -140,6 +144,38 @@ class Solution():
         defs = '\n'.join(operation_def_list)
         return defs
 
+    def get_prompt_for_an_opearation(self, operation):
+        assert self.solution_graph, "Do not find solution graph!"
+        # operation_dict = function_def.copy()
+
+        node_name = operation['node_name']
+
+        # get ancestors code
+        ancestor_operations = self.get_ancestor_operations(node_name)
+        ancestor_operation_codes = '\n'.join([oper['operation_code'] for oper in ancestor_operations])
+        descendant_operations = self.get_descendant_operations(node_name)
+        descendant_defs = self.get_descendant_operations_definition(descendant_operations)
+
+        pre_requirements = [
+            f'The function description is: {operation["description"]}',
+            f'The function definition is: {operation["function_definition"]}',
+            f'The function return line is: {operation["return_line"]}'
+        ]
+
+        operation_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(
+            pre_requirements + constants.operation_requirement)])
+
+        operation_prompt = f'Your role: {constants.operation_role} \n' + \
+                           f'operation_task: {constants.operation_task_prefix} {operation["description"]} \n' + \
+                           f'This function is one step to solve the question: {self.task} \n' + \
+                           f'Data locations: {self.data_locations_str} \n' + \
+                           f'Reply example: {constants.operation_reply_exmaple} \n' + \
+                           f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
+                           f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
+                           f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs}"
+
+        operation['operation_prompt'] = operation_prompt
+        # self.operations.append(operation_dict)
     def get_prompts_for_operations(self):
         assert self.solution_graph, "Do not find solution graph!"
         def_list, data_node_list = helper.generate_function_def_list(self.solution_graph)
@@ -178,21 +214,21 @@ class Solution():
             self.operations.append(operation_dict)
         return self.operations
 
-    
+    # initial the oepartion list
+    def initial_operations(self):
+        self.operations = []
+        operation_names = self.operation_node_names
+        for node_name in operation_names:
+            function_def_returns = helper.generate_function_def(node_name, self.solution_graph)
+            self.operations.append(function_def_returns)
     def get_LLM_responses_for_operations(self):
-         
-        if len(self.operations) == 0:
-            self.get_prompts_for_operations()
-            
+        # def_list, data_node_list = helper.generate_function_def_list(self.solution_graph)
+        self.initial_operations()
         for idx, operation in enumerate(self.operations):
-            
+            node_name = operation['node_name']
             print(f"{idx + 1} / {len(self.operations)}, {operation['node_name']}")
-            prompt = operation['operation_prompt']
-            
-            if prompt == "":
-                 self.get_prompts_for_operations()
-            # print("prompt: \n", self.model, prompt)
-            
+            prompt = self.get_prompt_for_an_opearation(operation)
+
             response = helper.get_LLM_reply(
                           prompt=prompt,
                           system_role=constants.operation_role,

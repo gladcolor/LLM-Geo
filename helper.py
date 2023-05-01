@@ -158,9 +158,9 @@ def generate_function_def_list(G):
             function_def_returns = generate_function_def(node_name, G)
             def_list.append(function_def_returns)
             
-        if node_type == 'operation':  
+        if node_type == 'data':
             data_node_list.append(node_name)
-            
+
     return def_list, data_node_list
 
 def get_given_data_nodes(G):
