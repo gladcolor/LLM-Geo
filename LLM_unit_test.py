@@ -26,16 +26,14 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)  # add assertion here
 
     def test_get_prompt_for_an_opearation(self):
-        with open(r'E:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
+        # with open(r'E:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
+        with open(r'F:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
             solution = pickle.load(f)
+
+        solution.load_graph_file()
         solution.get_LLM_responses_for_operations()
         operations = solution.operations
 
-        for idx, operation in enumerate(operations):
-            print(operation['node_name'])
-            solution.get_prompt_for_an_opearation(operation)
-
-            print(operation)
         self.assertEqual(True, True)  # add assertion here
 
 if __name__ == '__main__':

@@ -62,7 +62,7 @@ class Solution():
         
         self.graph_prompt = graph_prompt
         
-    def get_LLM_response_for_graph(self):
+    def get_LLM_response_for_graph(self, execuate=True):
         response = helper.get_LLM_reply(
                                         prompt=self.graph_prompt,
                                         system_role=self.role,
@@ -74,7 +74,9 @@ class Solution():
         except Exception as e:
             self.code_for_graph = ""
             print("Extract graph Python code rom LLM failed.")
-
+        if execuate:
+            exec(self.code_for_graph)
+            self.load_graph_file()
         return self.graph_response
         
     def load_graph_file(self, file=""):
@@ -100,10 +102,11 @@ class Solution():
     @property
     def operation_node_names(self):
         opera_node_names = []
+        assert self.solution_graph, "The Soluction class instance has no solution graph. Please generate the graph"
         for node_name in self.solution_graph.nodes():
             node = self.solution_graph.nodes[node_name]
             if node['node_type'] == 'operation':
-                opera_node_names.append(node['node_name'])
+                opera_node_names.append(node_name)
         return opera_node_names
 
     def get_ancestor_operations(self, node_name):
@@ -155,6 +158,7 @@ class Solution():
         ancestor_operation_codes = '\n'.join([oper['operation_code'] for oper in ancestor_operations])
         descendant_operations = self.get_descendant_operations(node_name)
         descendant_defs = self.get_descendant_operations_definition(descendant_operations)
+        descendant_defs_str = str(descendant_defs)
 
         pre_requirements = [
             f'The function description is: {operation["description"]}',
@@ -172,9 +176,10 @@ class Solution():
                            f'Reply example: {constants.operation_reply_exmaple} \n' + \
                            f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
                            f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
-                           f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs}"
+                           f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs_str}"
 
         operation['operation_prompt'] = operation_prompt
+        return operation_prompt
         # self.operations.append(operation_dict)
     def get_prompts_for_operations(self):
         assert self.solution_graph, "Do not find solution graph!"

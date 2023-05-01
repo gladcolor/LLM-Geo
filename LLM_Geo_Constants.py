@@ -75,7 +75,8 @@ operation_requirement = [
                         "Use the latest Python module methods.",
                         "When doing spatial analysis, convert the involved layers into the same map projection.",
                         "When joining tables, convert the involved columns to string type without leading zeros.",
-                        "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed."
+                        "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
+                        "",
                         ]
 
 
