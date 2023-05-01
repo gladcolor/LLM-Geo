@@ -36,7 +36,9 @@ class Solution():
         self.graph_file = os.path.join(self.save_dir, f"{self.task_name}.graphml")
         self.source_nodes = None
         self.sink_nodes = None
-        self.operations = []
+        self.operations = []  # each operation is an element:
+        # {node_name: "", function_descption: "", function_definition:"", return_line:""
+        # operation_prompt:"", operation_code:""}
         self.assembly_prompt = ""
         
         self.parent_solution = None
@@ -94,7 +96,50 @@ class Solution():
         self.sink_nodes = helper.find_sink_node(self.solution_graph)
          
         return self.solution_graph 
-              
+
+    @property
+    def operation_node_names(self):
+        opera_node_names = []
+        opera_node_names = [oper['node_name'] for oper in self.operations]
+        return opera_node_names
+    def get_ancestor_operations(self, node_name):
+        ancestor_operation_names = []
+        ancestor_node_names = nx.ancestors(self.solution_graph, node_name)
+        # for ancestor_node_name in ancestor_node_names:
+        ancestor_operation_names = [node_name for node_name in ancestor_node_names if node_name in self.operation_node_names]
+
+        ancestor_operation_nodes = []
+        for oper in self.operations:
+            oper_name = oper['node_name']
+            if oper_name in ancestor_operation_names:
+                ancestor_operation_nodes.append(oper)
+
+        return ancestor_operation_nodes
+
+    def get_descendant_operations(self, node_name):
+        descendant__operation_names = []
+        descendant_node_names = nx.descendants(self.solution_graph, node_name)
+        # for descendant_node_name in descendant_node_names:
+        descendant__operation_names = [node_name for node_name in descendant_node_names if node_name in self.operation_node_names]
+        # descendant_codes = '\n'.join([oper['operation_code'] for oper in descendant_node_names])
+        descendant_operation_nodes = []
+        for oper in self.operations:
+            oper_name = oper['node_name']
+            if oper_name in descendant__operation_names:
+                descendant_operation_nodes.append(oper)
+
+        return descendant_operation_nodes
+
+    def get_descendant_operations_definition(self, descendant_operations):
+
+        keys = ['node_name', 'description', 'function_definition', 'return_line']
+        operation_def_list = []
+        for node in descendant_operations:
+            operation_def = {key: node[key] for key in keys}
+            operation_def_list.append(str(operation_def))
+        defs = '\n'.join(operation_def_list)
+        return defs
+
     def get_prompts_for_operations(self):
         assert self.solution_graph, "Do not find solution graph!"
         def_list, data_node_list = helper.generate_function_def_list(self.solution_graph)
@@ -102,6 +147,15 @@ class Solution():
         
         for idx, function_def in enumerate(def_list): 
             operation_dict = function_def.copy()
+
+            node_name = function_def['node_name']
+
+            # get ancestors code
+            ancestor_operations = self.get_ancestor_operations(node_name)
+            ancestor_operation_codes = '\n'.join([oper['operation_code'] for oper in ancestor_operations])
+            descendant_operations = self.get_descendant_operations(node_name)
+            descendant_defs = self.get_descendant_operations_definition(descendant_operations)
+
             pre_requirements = [
                                 f'The function description is: {function_def["description"]}',
                                 f'The function definition is: {function_def["function_definition"]}',
@@ -117,7 +171,8 @@ class Solution():
                                f'Data locations: {self.data_locations_str} \n' + \
                                f'Reply example: {constants.operation_reply_exmaple} \n' + \
                                f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
-                               f"All functions for the question are (node_name is function name): \n {def_list}"
+                               f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
+                               f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs}"
             
             operation_dict['operation_prompt'] = operation_prompt 
             self.operations.append(operation_dict)
@@ -153,8 +208,8 @@ class Solution():
             operation['operation_code'] = operation_code
             
         return self.operations
-            
-            
+
+
     def prompt_for_assembly_program(self):
         all_operation_code_str = '\n'.join([operation['operation_code'] for operation in self.operations])
         # operation_code = solution.operations[-1]['operation_code']

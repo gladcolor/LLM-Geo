@@ -4,7 +4,7 @@ config.read('config.ini')
 
 # use your KEY.
 OpenAI_key = config.get('API_Key', 'OpenAI_key')
-print("OpenAI_key:", OpenAI_key)
+# print("OpenAI_key:", OpenAI_key)
 
 
 # carefully change these prompt parts!   
