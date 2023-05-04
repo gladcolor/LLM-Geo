@@ -253,7 +253,8 @@ def show_graph(G):
     # Update node colorsb
     for i, color in enumerate(node_colors):
         nt.nodes[i]['color'] = color
-        nt.nodes[i]['shape'] = 'box'
+        # nt.nodes[i]['shape'] = 'box'
+        nt.nodes[i]['shape'] = 'dot'
         # nt.set_node_style(node, shape="box")
          
     return nt

@@ -30,6 +30,7 @@ G.add_edge("load_haz_waste_shp", "haz_waste_gdf")
 """
 graph_requirement = [   
                         'Think step by step.',
+                        'DO NOT over-split task into too many small steps, especially for simple problems. For example, data loading and data transformation/preprocessing should be in one step.',
                         'steps and data (both input and output) form a graph stored in NetworkX. Diconnected components are NOT allowed.',
                         'Each step is a data process operation: the input can be data paths or variables, and the output can be data paths or variables.',
                         'There are two types of nodes: a) operation node, and b) data node (both input and output data). These nodes are also input nodes for the next operation node.',
@@ -46,6 +47,7 @@ graph_requirement = [
                         'Put your reply into a Python code block, NO explanation or conversation outside the code block(enclosed by ```python and ```).',
                         'Note that GraphML writer does not support class dict or list as data values.',
                         'You need spatial data (e.g., vector or raster) to make a map.',
+                        'Do not put the GraphML writing process as a step in the graph.',
                          ]
 
 
@@ -74,9 +76,10 @@ operation_requirement = [
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "Use the latest Python module methods.",
                         "When doing spatial analysis, convert the involved layers into the same map projection.",
+                        # "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "When joining tables, convert the involved columns to string type without leading zeros.",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
-                        "",
+                        # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
                         ]
 
 
