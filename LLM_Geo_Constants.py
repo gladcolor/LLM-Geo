@@ -39,7 +39,7 @@ graph_requirement = [
                         'The data and operation form a graph.',
                         'The first operations are data loading or collection, and the output of the last operation is the final answer to the task.'
                         'Operation nodes need to connect via output data nodes, DO NOT connect the operation node directly.',
-                        'The node attributes include: 1) node_type (data or operation), 2) data_path (data node only, set to "" if not given ), and description. E.g., {‘name’: “County boundary”, “data_type”: “data”, “data_path”:”D:\Test\county.shp”,  “description”: “County boundary for the study area”}.',
+                        'The node attributes include: 1) node_type (data or operation), 2) data_path (data node only, set to "" if not given ), and description. E.g., {‘name’: “County boundary”, “data_type”: “data”, “data_path”: “D:\Test\county.shp”,  “description”: “County boundary for the study area”}.',
                         'The connection between a node and an operation node is an edge.', 
                         'Add all nodes and edges, including node attributes to a NetworkX instance, DO NOT change the attribute names.',
                         'DO NOT generate code to implement the steps.',
@@ -79,6 +79,8 @@ operation_requirement = [
                         # "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "When joining tables, convert the involved columns to string type without leading zeros.",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
+                        "If using colorbar in GeoPandas maps, set the colorbar's height or length as the same as the map.",
+                        "Carefuly write the code, especially the data type when filtering or join data in Pandas DataFrame.",
                         # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
                         ]
 
