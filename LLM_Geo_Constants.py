@@ -80,6 +80,7 @@ operation_requirement = [
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar in GeoPandas maps, set the colorbar's height or length as the same as the map.",
                         "Remember the column names and file names used in ancestor functions when joining tables.",
+                        "Show a progressbar (e.g., tqdm in Python) if loop more than 10 times, also add expectinon handling for loops to make sure the loop can run.",
                         # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
                         ]
 

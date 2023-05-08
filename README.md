@@ -11,3 +11,5 @@ Clone or download the repository, rename `your_config.ini` as `config.ini`. Then
 # How to use
 
 Download all files, put your question to the `TASK` variable in LLM-Geo4.ipynb, then runn all cells.
+
+Set the `task_name` in the notebook. Space is not allowed. LLM-Geo will create the fold using the `task_name' to save results.
