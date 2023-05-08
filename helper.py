@@ -44,7 +44,7 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
 
     # Query ChatGPT with the prompt
     if verbose:
-        print("Geting reply...")
+        print("Geting LLM reply...")
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
@@ -53,7 +53,7 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
         ]
         )
     if verbose:
-        print("Got reply.")
+        print("Got LLM reply.")
     
     return response
 

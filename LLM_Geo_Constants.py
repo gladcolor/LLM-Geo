@@ -30,7 +30,7 @@ G.add_edge("load_haz_waste_shp", "haz_waste_gdf")
 """
 graph_requirement = [   
                         'Think step by step.',
-                        'DO NOT over-split task into too many small steps, especially for simple problems. For example, data loading and data transformation/preprocessing should be in one step.',
+                        # 'DO NOT over-split task into too many small steps, especially for simple problems. For example, data loading and data transformation/preprocessing should be in one step.',
                         'steps and data (both input and output) form a graph stored in NetworkX. Diconnected components are NOT allowed.',
                         'Each step is a data process operation: the input can be data paths or variables, and the output can be data paths or variables.',
                         'There are two types of nodes: a) operation node, and b) data node (both input and output data). These nodes are also input nodes for the next operation node.',
@@ -66,8 +66,7 @@ return tract_population_df
 ```
 """
 
-operation_requirement = [
-                         
+operation_requirement = [                         
                         'DO NOT change the given variable names and paths.',
                         'Put your reply into a Python code block(enclosed by ```python and ```), NO explanation or conversation outside the code block.',
                         'If using GeoPandas to load zipped ESRI files from a URL, load the file directly, DO NOT unzip ESRI files. E.g., gpd.read_file(URL)',
@@ -80,7 +79,7 @@ operation_requirement = [
                         "When joining tables, convert the involved columns to string type without leading zeros.",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar in GeoPandas maps, set the colorbar's height or length as the same as the map.",
-                        "Carefuly write the code, especially the data type when filtering or join data in Pandas DataFrame.",
+                        "Remember the column names and file names used in ancestor functions when joining tables.",
                         # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
                         ]
 

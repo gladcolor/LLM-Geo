@@ -22,6 +22,7 @@ class Solution():
                  save_dir,                
                  role=constants.graph_role,
                  model=r"gpt-3.5-turbo",
+                 # model=r"gpt-3.5-turbo",
                  data_locations=[],
                  
                 ):        
