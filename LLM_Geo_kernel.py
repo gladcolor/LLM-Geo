@@ -283,6 +283,7 @@ class Solution():
             code_for_assembly = helper.extract_code(response=self.assembly_LLM_response, verbose=False)
         except Exception as e:
                 code_for_assembly = ""
+                
         self.code_for_assembly = code_for_assembly
         
         return self.assembly_LLM_response
