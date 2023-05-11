@@ -1,0 +1,165 @@
+API Documentation
+Census Geographies
+class censusdata.censusgeo.censusgeo(geo, name='')
+Class for representing Census geographies.
+
+Parameters:	
+geo (tuple of 2-tuples of strings) – Tuple of 2-tuples of the form (geographic component, identifier), where geographic component is a string (e.g., ‘state’) and identifier is either a numeric code (e.g., ‘01’) or a wildcard (‘*’). These identify the geography in question.
+name (str, optional) – Name of geography (e.g., ‘Alabama’).
+Examples:
+
+censusgeo([('state', '06'), ('place', '53000')], 'Oakland city, California') # Represents the Census geography for Oakland city, California.
+censusgeo([('state', '17'), ('county', '031')]) # Represents the Census geography for Cook County, Illinois.
+hierarchy()
+Geography hierarchy for the geographic level of this object.
+
+Returns:	String representing the geography hierarchy (e.g., ‘state> county’).
+Return type:	str
+params()
+Geographic parameters of this object.
+
+Returns:	Tuple representing the geography hierarchy. Can be used as argument in creating new censusgeo object.
+Return type:	tuple
+Examples:
+
+g = censusdata.censusgeo([('state', '06'), ('place', '53000')])
+g.params() # returns (('state', '06'), ('place', '53000'))
+request()
+Generate geographic parameters for Census API request.
+
+Returns:	Dictionary with appropriate ‘for’ and, if needed, ‘in’ parameters for Census API request.
+Return type:	dict
+sumlevel()
+Summary level code for the geographic level of this object.
+
+Returns:	String representing the summary level code for this object’s geographic level, e.g., ‘050’ for ‘state> county’.
+Return type:	str
+Census Variables
+Functions for showing information about Census variables.
+
+censusdata.variable_info.censustable(src, year, table)
+Look up information on all variables in a table.
+
+Parameters:	
+src (str) – Census data source: ‘acs1’ for ACS 1-year estimates, ‘acs5’ for ACS 5-year estimates, ‘acs3’ for ACS 3-year estimates, ‘acsse’ for ACS 1-year supplemental estimates, ‘sf1’ for SF1 data.
+year (int) – Year of data.
+table (str) – Table name.
+Returns:	
+Dictionary of variables in table, with keys ‘concept’ (overall concept the variable falls under), ‘label’ (variable label),
+and ‘predicateType’ (variable type).
+
+Return type:	
+OrderedDict
+
+Examples:
+
+censusdata.censustable('acs1', 2015, 'B23025') # Returns information on table B23025 (Employment Status for Population 16+ Years) from the ACS 2015 1-year estimates.
+censusdata.variable_info.censusvar(src, year, var)
+Download information on a list of variables from Census API.
+
+Parameters:	
+src (str) – Census data source: ‘acs1’ for ACS 1-year estimates, ‘acs5’ for ACS 5-year estimates, ‘acs3’ for ACS 3-year estimates, ‘acsse’ for ACS 1-year supplemental estimates, ‘sf1’ for SF1 data.
+year (int) – Year of data.
+var (list of str) – Names of Census variable.
+Returns:	
+Dictionary with keys ‘concept’ (overall concept the variable falls under), ‘label’ (variable label),
+and ‘predicateType’ (variable type).
+
+Return type:	
+dict
+
+Examples:
+
+censusdata.censusvar('sf1', 2010, ['P001001']) # Returns information on the variable P0010001 from the 2010 Census SF1.
+censusdata.variable_info.printtable(table, moe=False)
+Pretty print information on a Census table (such as produced by censustable).
+
+Parameters:	
+table (OrderedDict) – Table information from censustable.
+moe (bool, optional) – Display margins of error.
+Returns:	
+None.
+
+Examples:
+
+censusdata.printtable(censusdata.censustable('acs5', 2015, 'B19013'))
+censusdata.variable_info.search(src, year, field, criterion, tabletype='detail')
+Search Census variables.
+
+Parameters:	
+src (str) – Census data source: ‘acs1’ for ACS 1-year estimates, ‘acs5’ for ACS 5-year estimates, ‘acs3’ for ACS 3-year estimates, ‘acsse’ for ACS 1-year supplemental estimates, ‘sf1’ for SF1 data.
+year (int) – Year of data.
+field (str) – Field in which to search.
+criterion (str or function) – Search criterion. Either string to search for, or a function which will be passed the value of field and return True if a match and False otherwise.
+tabletype (str, optional) – Type of table from which variables are drawn (only applicable to ACS data). Options are ‘detail’ (detail tables), ‘subject’ (subject tables), ‘profile’ (data profile tables), ‘cprofile’ (comparison profile tables).
+Returns:	
+List of 3-tuples containing variable names, concepts, and labels matching the search criterion.
+
+Return type:	
+list
+
+Examples:
+
+# Search for ACS 2011-2015 5-year estimate variables where the concept includes the text 'unweighted sample'.
+censusdata.search('acs5', 2015, 'concept', 'unweighted sample')
+# Search for ACS 2011-2015 5-year estimate variables where the specific variable label includes the text 'unemploy'.
+censusdata.search('acs5', 2015, 'label', 'unemploy')
+# Search for ACS 2011-2015 5-year estimate variables where the concept includes the text 'unweighted sample' and the text 'housing'.
+censusdata.search('acs5', 2015, 'concept', lambda value: re.search('unweighted sample', value, re.IGNORECASE) and re.search('housing', value, re.IGNORECASE))
+Download Data
+Functions for downloading data and lists of geographies from the Census API.
+
+censusdata.download.download(src, year, geo, var, key=None, tabletype='detail', endpt='')
+Download data from Census API.
+
+Parameters:	
+src (str) – Census data source: ‘acs1’ for ACS 1-year estimates, ‘acs5’ for ACS 5-year estimates, ‘acs3’ for ACS 3-year estimates, ‘acsse’ for ACS 1-year supplemental estimates, ‘sf1’ for SF1 data.
+year (int) – Year of data.
+geo (censusgeo) – Geographies for which to download data.
+var (list of str) – Census variables to download.
+key (str, optional) – Census API key.
+tabletype (str, optional) – Type of table from which variables are drawn (only applicable to ACS data). Options are ‘detail’ (detail tables), ‘subject’ (subject tables), ‘profile’ (data profile tables), ‘cprofile’ (comparison profile tables).
+endpt (str, optional) – Allows override of whether old or new API endpoint is used. Specify ‘old’ for old, ‘new’ for new, ‘’ to use default. This option generally shouldn’t need to be specified but can be helpful if download problems are encountered.
+Returns:	
+Data frame with columns corresponding to designated variables, and row index of censusgeo objects representing Census geographies.
+
+Return type:	
+pandas.DataFrame
+
+Raises:	
+ValueError – If unknown tabletype is specified.
+
+Examples:
+
+# Download ACS 2011-2015 5-year estimates for Oakland city, California on population size, median age, and median household income.
+censusdata.download('acs5', 2015, censusdata.censusgeo([('state', '06'), ('place', '53000')]), ['B01001_001E', 'B01002_001E', 'B19013_001E'])
+censusdata.download.geographies(within, src, year, key=None, endpt='')
+List geographies within a given geography, e.g., counties within a state.
+
+Parameters:	
+within (censusgeo) – Geography within which to list geographies.
+src (str) – Census data source: ‘acs1’ for ACS 1-year estimates, ‘acs5’ for ACS 5-year estimates, ‘acs3’ for ACS 3-year estimates, ‘acsse’ for ACS 1-year supplemental estimates, ‘sf1’ for SF1 data.
+year (int) – Year of data.
+key (str, optional) – Census API key.
+endpt (str, optional) – Allows override of whether old or new API endpoint is used. Specify ‘old’ for old, ‘new’ for new, ‘’ to use default. This option generally shouldn’t need to be specified but can be helpful if download problems are encountered.
+Returns:	
+Dictionary with names as keys and censusgeo objects as values.
+
+Return type:	
+dict
+
+Examples:
+
+# Pull data on all state geographies from the ACS 2011-2015 5-year estimates.
+censusdata.geographies(censusdata.censusgeo([('state', '*')]), 'acs5', 2015)
+Export Data
+Functions to faciliate exporting data downloaded from Census API.
+
+censusdata.export.exportcsv(file, data)
+Export Pandas DataFrame where index is composed of censusgeo objects. Can be used with return value from download().
+
+Parameters:	
+file – String or file handler for exporting data.
+data (pandas.DataFrame) – Data to export.
+Returns:	
+None.
