@@ -5,8 +5,60 @@ import helper
 import pickle
 import os
 import networkx as nx
+from LLM_Geo_kernel import Solution
 
 class MyTestCase(unittest.TestCase):
+    def test_get_LLM_response_for_graph(self):
+        # Case 4: COVID-19 prevalence
+        TASK = r"""1) Draw map matrix of South Carolina counties' monthly COVID-19 infection ratio with a weekly smooth in 2021.
+        2) the infection ratio = (infection of this month / county popultion).
+        """
+
+        # API_DOC_LOCATION = [(1, r'https://raw.githubusercontent.com/gladcolor/LLM-Geo/master/COVID-19/CensusData_API_DOC.txt')]
+        API_DOC_LOCATION = [(1, r'./COVID-19/CensusData_API_DOC.txt')]
+
+        # [(Input_data_index, API_cocumentation_path)]
+
+        DATA_LOCATIONS = [
+            "COVID-19 data case in 2021 (county-level): https://github.com/nytimes/covid-19-data/raw/master/us-counties-2021.csv. It is a CSV file; there are 5 columns: date (format: 2021-02-01),county,state,fips,cases,deaths",
+            "Population data: use Python library CensusData to obtain data. ",
+            ]
+
+        # add the API documentation to DATA_LOCATION
+        for idx, path in API_DOC_LOCATION:
+            with open(path, 'r', encoding='utf-8') as f:
+                docs = f.readlines()
+            docs = '\n'.join(docs)
+
+            DATA_LOCATIONS[idx] += "The documentation is: \n" + docs
+
+        task_name ='COVID-19_infection_rate'
+
+        save_dir = os.path.join(os.getcwd(), task_name)
+        os.makedirs(save_dir, exist_ok=True)
+
+        # create graph
+        # model=r"gpt-3.5-turbo"
+        model = r"gpt-4"
+        solution = Solution(
+            task=TASK,
+            task_name=task_name,
+            save_dir=save_dir,
+            data_locations=DATA_LOCATIONS,
+            model=model,
+        )
+        print("Prompt to get solution graph:\n")
+        print(solution.graph_prompt)
+
+        response_for_graph = solution.get_LLM_response_for_graph()
+        solution.graph_response = response_for_graph
+        solution.save_solution()
+        print()
+        print("Code to generate solution graph: \n")
+        print(solution.code_for_graph)
+
+        self.assertEqual(True, True)  # add assertion here
+
     def test_get_ancestor_code(self):
         with open(r'E:\Research\LLM-Geo\Resident_at_risk_counting\Resident_at_risk_counting.pkl', 'rb') as f:
             solution = pickle.load(f)

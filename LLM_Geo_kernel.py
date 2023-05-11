@@ -57,10 +57,9 @@ class Solution():
         
         graph_prompt = f'Your role: {self.role} \n' + \
                f'Task: {constants.graph_task_prefix} \n {self.task} \n' + \
-               f'Data locations (each data is a node): {self.data_locations_str} \n' + \
                f'Your reply needs to meet these requirements: \n {graph_requirement_str} \n \n' + \
-               f'Reply example: {constants.graph_reply_exmaple}'  
-        
+               f'Reply example: {constants.graph_reply_exmaple}' + \
+               f'Data locations (each data is a node): {self.data_locations_str} \n'
         self.graph_prompt = graph_prompt
         
     def get_LLM_response_for_graph(self, execuate=True):
