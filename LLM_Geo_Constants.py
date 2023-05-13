@@ -31,11 +31,11 @@ G.add_edge("load_haz_waste_shp", "haz_waste_gdf")
 graph_requirement = [   
                         'Think step by step.',
                         # 'DO NOT over-split task into too many small steps, especially for simple problems. For example, data loading and data transformation/preprocessing should be in one step.',
-                        'steps and data (both input and output) form a graph stored in NetworkX. Diconnected components are NOT allowed.',
+                        'Steps and data (both input and output) form a graph stored in NetworkX. Disconnected components are NOT allowed.',
                         'Each step is a data process operation: the input can be data paths or variables, and the output can be data paths or variables.',
                         'There are two types of nodes: a) operation node, and b) data node (both input and output data). These nodes are also input nodes for the next operation node.',
                         'The input of each operation is the output of the previous operations, except the those need to load data from a path or need to collect data.',
-                        'You need to carefully named the output data node.',
+                        'You need to carefully name the output data node.',
                         'The data and operation form a graph.',
                         'The first operations are data loading or collection, and the output of the last operation is the final answer to the task.'
                         'Operation nodes need to connect via output data nodes, DO NOT connect the operation node directly.',
@@ -43,7 +43,7 @@ graph_requirement = [
                         'The connection between a node and an operation node is an edge.', 
                         'Add all nodes and edges, including node attributes to a NetworkX instance, DO NOT change the attribute names.',
                         'DO NOT generate code to implement the steps.',
-                        'Join the attribute to the vector layer via a common attribute if necessery.', 
+                        'Join the attribute to the vector layer via a common attribute if necessary.',
                         'Put your reply into a Python code block, NO explanation or conversation outside the code block(enclosed by ```python and ```).',
                         'Note that GraphML writer does not support class dict or list as data values.',
                         'You need spatial data (e.g., vector or raster) to make a map.',
@@ -80,7 +80,7 @@ operation_requirement = [
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar in GeoPandas maps, set the colorbar's height or length as the same as the map.",
                         "Remember the column names and file names used in ancestor functions when joining tables.",
-                        "Show a progressbar (e.g., tqdm in Python) if loop more than 10 times, also add expectinon handling for loops to make sure the loop can run.",
+                        "Show a progressbar (e.g., tqdm in Python) if loop more than 10 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file."
                         # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
                         ]
