@@ -68,6 +68,6 @@ The results are: (a) Solution graph, (b) map matrix showing the spatial distribu
 
 # To Do
 - Add more case studies.
-- Improve the prompr generation.
+- Improve the promp generation.
 - Implement autonomous data collection module.
 
