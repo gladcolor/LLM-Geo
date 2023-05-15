@@ -12,7 +12,7 @@ We introduced the design principles of autonomous GIS to achieve these five auto
 For both case studies, LLM-Geo successfully returned accurate results, including aggregated numbers, graphs, and maps, significantly reducing manual operation time. Although still lacking several important modules such as logging and code testing, LLM-Geo demonstrates a potential path towards next-generation AI-powered GIS. We advocate for the GIScience community to dedicate more effort to the research and development of autonomous GIS, making spatial analysis easier, faster, and more accessible to a broader audience.
 
 ![img_1.png](images/img_1.png)
-Overall workflow of LLM-Geo
+Overall workflow of LLM-Geo 
 
 
 See our paper here: Autonomous GIS: the next-generation AI-powered GIS, [https://arxiv.org/abs/2305.06453](https://arxiv.org/abs/2305.06453). If you find our work is useful, please cite as: `Autonomous GIS: the next-generation AI-powered GIS. Zhenlong Li and Huan Ning. 2023. https://doi.org/10.48550/arXiv.2305.06453`
