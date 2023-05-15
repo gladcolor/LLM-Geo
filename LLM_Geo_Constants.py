@@ -75,7 +75,7 @@ operation_requirement = [
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "Use the latest Python module methods.",
                         "When doing spatial analysis, convert the involved layers into the same map projection.",
-                        # "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
+                        "Map projection conversion is only needed for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "When joining tables, convert the involved columns to string type without leading zeros.",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar in GeoPandas maps, set the colorbar's height or length as the same as the map.",
