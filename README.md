@@ -9,7 +9,7 @@ For two case studies, LLM-Geo successfully returned accurate results, including 
 ![img_1.png](images/img_1.png)
 Overall workflow of LLM-Geo
 
-Check out our preprint paper here: [Autonomous GIS: the next-generation AI-powered GIS](https://www.researchgate.net/publication/370635187_Autonomous_GIS_the_next-generation_AI-powered_GIS). Recommended citation format: `Li Z., Ning H., 2023. Autonomous GIS: the next-generation AI-powered GIS. https://doi.org/10.48550/arXiv.2305.06453
+Check out our preprint paper here: [Autonomous GIS: the next-generation AI-powered GIS](https://www.researchgate.net/publication/370635187_Autonomous_GIS_the_next-generation_AI-powered_GIS). Recommended citation format: `Li Z., Ning H., 2023. Autonomous GIS: the next-generation AI-powered GIS. arXiv.2305.06453
 
 Note:  We are still developing LLM-Geo, and the ideas presented in the paper may change due to the rapid development of AI. For instance, the token limitation appears to have been overcome by [Claude](https://www.anthropic.com/index/100k-context-windows) (released on 2023-05-11). We hope LLM-Geo can inspire GIScience professionals to further investigate more on autonomous GIS.    
 
