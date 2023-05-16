@@ -75,6 +75,7 @@ operation_requirement = [
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "Use the latest Python module methods.",
                         "When doing spatial analysis, convert the involved layers into the same map projection.",
+                        "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
                         # "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "When joining tables, convert the involved columns to string type without leading zeros.",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
@@ -83,6 +84,7 @@ operation_requirement = [
                         "Show a progressbar (e.g., tqdm in Python) if loop more than 10 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file."
                         # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
+                        
                         ]
 
 
