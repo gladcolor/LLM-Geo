@@ -1,4 +1,4 @@
-# Autonomous GIS: the next-generation AI-powered GIS
+# Autonomous GIS (AutoGIS): the next-generation AI-powered GIS
 
 GIS stands for Geographic Information System; one of its major functionality is to conduct spatial analysis, manually, in the current stage. Large Language Models (LLMs), such as ChatGPT, demonstrate a strong understanding of human natural language and have been explored and applied in various fields, including reasoning, creative writing, code generation, translation, and information retrieval. 
 
