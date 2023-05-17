@@ -69,7 +69,7 @@ return tract_population_df
 operation_requirement = [                         
                         'DO NOT change the given variable names and paths.',
                         'Put your reply into a Python code block(enclosed by ```python and ```), NO explanation or conversation outside the code block.',
-                        'If using GeoPandas to load zipped ESRI files from a URL, load the file directly, DO NOT unzip ESRI files. E.g., gpd.read_file(URL)',
+                        'If using GeoPandas to load a zipped ESRI shapefile from a URL, use gpd.read_file(URL). DO NOT download and unzip the file.',
                         "Generate descriptions for input and output arguments.",
                         "You need to receive the data from the functions, DO NOT load in the function if other functions have loaded the data and returned it in advance.",
                         "Note module 'pandas' has no attribute 'StringIO'",
@@ -83,9 +83,10 @@ operation_requirement = [
                         "Remember the column names and file names used in ancestor functions when joining tables.",
                         "Show a progressbar (e.g., tqdm in Python) if loop more than 10 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
-                        "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. "
+                        "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         # "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames.",
-                        "GEOID in US Census data and FIPS in Census boundaries are integer."
+                        "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS columns from read CSV files, set the dtype as 'str'.",
+                        "Drop nan rows when using Pandas, but need to report it.",
                         
                         ]
 
@@ -96,6 +97,6 @@ assembly_requirement = ['You can think step by step. ',
                     f"Each function is one step to solve the question. ",
                     f"The output of the final function is the question to the question.",
                     f"Put your reply in a code block(enclosed by ```python and ```), NO explanation or conversation outside the code block.",              
-                    f"Save final  maps, if any.",  
+                    f"Save final  maps, if any. If use matplotlib, the function is: matplotlib.pyplot.savefig(*args, **kwargs).",  
                     f"The program is executable.",
                     ]
