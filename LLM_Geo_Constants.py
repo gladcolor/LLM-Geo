@@ -99,7 +99,7 @@ operation_requirement = [
 # other requirements prone to errors, not used for now
 """
 "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames."
-"If make maps or graphs, make them looks beautiful and professional, carefuly select color, and show the layout, aspect, size, legend, scale bar, colorbar, background, annotation, axis ticks, title, font size, and label appropriately, but not overloaded."
+"When creating maps or graphs, make them looks beautiful and professional. Carefuly select color, and show the layout, aspect, size, legend, scale bar, colorbar, background, annotation, axis ticks, title, font size, and label appropriately, but not overloaded."
 """
 
 
