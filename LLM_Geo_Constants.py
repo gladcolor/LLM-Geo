@@ -91,7 +91,7 @@ operation_requirement = [
                         "Show a progressbar (e.g., tqdm in Python) if loop more than 10 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
-                        "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS columns from read CSV files, set the dtype as 'str'.",
+                        "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to read GEOID or FIPS columns from CSV files, set the dtype as 'str'.",
                         "Drop nan rows before using Pandas columns to join, but need to report it.",
                         # 
                         
