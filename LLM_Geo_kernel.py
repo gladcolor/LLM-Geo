@@ -24,7 +24,8 @@ class Solution():
                  model=r"gpt-3.5-turbo",
                  # model=r"gpt-3.5-turbo",
                  data_locations=[],
-                 
+                 stream=True,
+                 verbose=True,
                 ):        
         self.task = task        
         self.solution_graph = None
@@ -44,7 +45,9 @@ class Solution():
         
         self.parent_solution = None
         self.model = model
-        
+        self.stream = stream
+        self.verbose = verbose
+
         self.assembly_LLM_response = ""
         self.code_for_assembly = ""
         self.graph_prompt = ""
@@ -61,7 +64,11 @@ class Solution():
                f'Reply example: {constants.graph_reply_exmaple}' + \
                f'Data locations (each data is a node): {self.data_locations_str} \n'
         self.graph_prompt = graph_prompt
-        
+
+        # self.direct_request_prompt = ''
+        self.direct_request_LLM_response = ''
+        self.direct_request_code = ''
+
     def get_LLM_response_for_graph(self, execuate=True):
         response = helper.get_LLM_reply(
                                         prompt=self.graph_prompt,
@@ -292,6 +299,35 @@ class Solution():
         new_name = os.path.join(self.save_dir, f"{self.task_name}.pkl")
         with open(new_name, "wb") as f:
             pickle.dump(self, f)
-            
-        # print("Saved solution as:", new_name)
+
+    def get_solution_at_one_time(self):
+        pass
+
+    @property
+    def direct_request_prompt(self):
+
+        direct_request_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(
+            constants.direct_request_requirement)])
+
+        direct_request_prompt = f'Your role: {constants.direct_request_role} \n' + \
+                                f'Your task: {constants.direct_request_task_prefix} to address the question or task: {self.task} \n' + \
+                           f'Location for data you may need: {self.data_locations_str} \n' + \
+                           f'Your reply needs to meet these requirements: \n {direct_request_requirement_str} \n'
+        return direct_request_prompt
+
+    def get_direct_request_LLM_response(self):
+
+        response = helper.get_LLM_reply(prompt=self.direct_request_prompt,
+                                        model=self.model,
+                                        stream=self.stream,
+                                        verbose=self.verbose,
+                                        )
+
+        self.direct_request_LLM_response = response
+
+        self.direct_request_code = helper.extract_code(response=response)
+
+        return self.direct_request_LLM_response
+
+
 
