@@ -15,12 +15,46 @@ from pyvis.network import Network
 
 import LLM_Geo_Constants as constants
 
-def extract_code(response, verbose=True):
+def extract_content_from_LLM_reply(response):
+    stream = False
+    if isinstance(response, list):
+        stream = True
+        
+    content = ""
+    if stream:       
+        for chunk in response:
+            chunk_content = chunk["choices"][0].get("delta", {}).get("content")         
+
+            if chunk_content is not None:
+                # print(chunk_content, end='')
+                content += chunk_content
+                # print(content)
+        # print()
+    else:
+        content = response["choices"][0]['message']["content"]
+        # print(content)
+        
+    return content
+
+
+def extract_code(response, verbose=False):
     '''
     Extract python code from reply
     '''
+    # if isinstance(response, list):  # use OpenAI stream mode.
+    #     reply_content = ""
+    #     for chunk in response:
+    #         chunk_content = chunk["choices"][0].get("delta", {}).get("content")
+    #
+    #         if chunk_content is not None:
+    #             print(chunk_content, end='')
+    #             reply_content += chunk_content
+    #             # print(content)
+    # else:  # Not stream:
+    #     reply_content = response["choices"][0]['message']["content"]
+
     python_code = ""
-    reply_content = response['choices'][0]['message']['content']
+    reply_content = extract_content_from_LLM_reply(response)
     python_code_match = re.search(r"```(?:python)?(.*?)```", reply_content, re.DOTALL)
     if python_code_match:
         python_code = python_code_match.group(1).strip()
@@ -35,6 +69,8 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
                   system_role=r'You are a professional Geo-information scientist and developer.',
                   model=r"gpt-3.5-turbo",
                   verbose=True,
+                  tempratrue=0.5,
+                  stream=True,
                   ):
     openai.api_key = constants.OpenAI_key
 
@@ -43,17 +79,32 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
     # prompt = prompt + url
 
     # Query ChatGPT with the prompt
-    if verbose:
-        print("Geting LLM reply...")
+    # if verbose:
+    #     print("Geting LLM reply... \n")
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
         {"role": "system", "content": system_role},
         {"role": "user", "content": prompt},
-        ]
+        ],
+        stream=stream,
         )
-    if verbose:
-        print("Got LLM reply.")
+
+    response_chucks = []
+    if stream:
+        for chunk in response:
+            response_chucks.append(chunk)
+            content = chunk["choices"][0].get("delta", {}).get("content")
+            if content is not None:
+                if verbose:
+                    print(content, end='')
+    else:
+        content = response["choices"][0]['message']["content"]
+        # print(content)
+    print('\n\n')
+    # print("Got LLM reply.")
+        
+    response = response_chucks # good for saving
     
     return response
 

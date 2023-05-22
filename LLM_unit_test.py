@@ -88,6 +88,16 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)  # add assertion here
 
+    def test_extractcontent_content_from_LLM_reply(self):
+        prompt = 'Write a python program to compute the delta time. The code should be inside a python code block between : ```python\n```.'
+        response = helper.get_LLM_reply(prompt=prompt)
+        content = helper.extract_content_from_LLM_reply(response)
+        print()
+        print('-------------- Content ---------------: \n', content, '\n')
+        code = helper.extract_code(response=response)
+        print("-------------- Code ---------------: \n", code)
+        self.assertEqual(True, True)
+
 if __name__ == '__main__':
     unittest.main()
 
