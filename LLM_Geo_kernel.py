@@ -329,5 +329,38 @@ class Solution():
 
         return self.direct_request_LLM_response
 
+    def execute_complete_program(self, try_cnt=5):
+        count = 0
+        while count  < try_cnt:
+            print("\n\n-------------- Running code --------------\n\n")
+            try:
+                exec(self.direct_request_code)  # this will raise a ZeroDivisionError
+                count += 1
+                break
+            except Exception as e:
+                print("An error occurred: ", e)
+
+                debug_prompt = self.get_debug_prompt(exception=e)
+
+                response = helper.get_LLM_reply(prompt=debug_prompt)
+                code = helper.extract_code(response)
+                self.direct_request_code = code
+
+            print("\n\n--------------- Done ---------------\n\n")
+
+    def get_debug_prompt(self, exception):
+
+
+        debug_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(constants.debug_requirement)])
+
+        debug_prompt = f"Your role: {constants.debug_role} \n" + \
+                          f"Your task is: correct the code of a program according to the error information, then return the corrected and completed  program. \n" + \
+                          f"Your will receive the code for this task: {self.task} \n" + \
+                          f"Data location: \n {self.data_locations_str} \n" + \
+                          f"The code have some errors, the error information is:  {exception} \n" + \
+                          f"Requirement: \n {debug_requirement_str}"
+
+        return debug_prompt
+
 
 

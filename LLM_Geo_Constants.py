@@ -147,3 +147,28 @@ direct_request_requirement = [
                         "Drop nan rows before using Pandas columns to join, but need to report it.",
                         #
                         ]
+
+#--------------- constants for debugging prompt generation  ---------------
+debug_role = graph_role
+
+debug_task_prefix = r'You need to correct the code of a program, then return the complete corrected code. '
+
+debug_requirement = [
+                        'Correct the code.',
+                        'Put your reply into a Python code block(enclosed by ```python and ```), NO explanation or conversation outside the code block.',
+                        'If using GeoPandas to load a zipped ESRI shapefile from a URL, use gpd.read_file(URL). DO NOT download and unzip the file.',
+                        "Note module 'pandas' has no attribute 'StringIO'",
+                        "When doing spatial analysis, convert the involved spatial layers into the same map projection.",
+                        "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
+                        "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
+                        "If join DataFrame and GeoDataFrame, using common columns, DO NOT convert DataFrame to GeoDataFrame.",
+                        "When joining tables, convert the involved columns to string type without leading zeros. ",
+                        "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
+                        "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
+                        "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
+                        "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
+                        "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
+                        "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
+                        "Drop nan rows before using Pandas columns to join, but need to report it.",
+                        #
+                        ]
