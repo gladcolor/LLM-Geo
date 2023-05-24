@@ -329,26 +329,33 @@ class Solution():
 
         return self.direct_request_LLM_response
 
-    def execute_complete_program(self, try_cnt=5):
+    def execute_complete_program(self, code: str, try_cnt: int = 10) -> str:
         count = 0
-        while count  < try_cnt:
-            print("\n\n-------------- Running code --------------\n\n")
+        while count < try_cnt:
+            print(f"\n\n-------------- Running code (trial # {count + 1}/{try_cnt}) --------------\n\n")
             try:
-                exec(self.direct_request_code)  # this will raise a ZeroDivisionError
                 count += 1
-                break
+                exec(code)  #
+                print("\n\n--------------- Done ---------------\n\n")
+                return code
             except Exception as e:
                 print("An error occurred: ", e)
-
-                debug_prompt = self.get_debug_prompt(exception=e)
-
-                response = helper.get_LLM_reply(prompt=debug_prompt)
+                debug_prompt = self.get_debug_prompt(exception=e, code=code)
+                print("Sending error information to LLM for debugging...")
+                # print("Prompt:\n", debug_prompt)
+                response = helper.get_LLM_reply(prompt=debug_prompt,
+                                                system_role=constants.debug_role,
+                                                model=self.model,
+                                                verbose=True,
+                                                stream=True,
+                                                retry_cnt=5,
+                                                )
                 code = helper.extract_code(response)
-                self.direct_request_code = code
+                # self.execute_complete_program(code, try_cnt=(try_cnt - count))
+        return code
 
-            print("\n\n--------------- Done ---------------\n\n")
 
-    def get_debug_prompt(self, exception):
+    def get_debug_prompt(self, exception, code):
 
 
         debug_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(constants.debug_requirement)])
@@ -357,8 +364,9 @@ class Solution():
                           f"Your task is: correct the code of a program according to the error information, then return the corrected and completed  program. \n" + \
                           f"Your will receive the code for this task: {self.task} \n" + \
                           f"Data location: \n {self.data_locations_str} \n" + \
+                          f"Requirement: \n {debug_requirement_str} \n" + \
                           f"The code have some errors, the error information is:  {exception} \n" + \
-                          f"Requirement: \n {debug_requirement_str}"
+                          f"The code is: \n{code}"
 
         return debug_prompt
 
