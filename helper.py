@@ -7,7 +7,7 @@ import logging
 import time
 
 import os
-# import requests
+import requests
 import networkx as nx
 import pandas as pd
 import geopandas as gpd

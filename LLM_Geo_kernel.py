@@ -1,10 +1,10 @@
 import LLM_Geo_Constants as constants
 import helper
 import os
-# import requests
+import requests
 import networkx as nx
-# import pandas as pd
-# import geopandas as gpd
+import pandas as pd
+import geopandas as gpd
 # from pyvis.network import Network
 import openai
 import pickle

@@ -58,7 +58,8 @@ Data locations:
 The results are: (a) Solution graph, (b) map matrix showing the spatial distribution of mobility change rate, (c) line chart showing the trend of the mobility change rate, (d) assembly program. 
 ![img_2.png](images/img_3.png)
 
-
+Note: The ODT explorer API needs to be woken up before being used. Simple open this URL: [http://gis.cas.sc.edu/GeoAnalytics/od.html](http://gis.cas.sc.edu/GeoAnalytics/od.html) in your browser, then fresh the webpage until you see the flows counts like bellow:
+![img.png](images/img_5.png) 
 # To Do
 - Add more case studies.
 - Improve the prompt generation.
