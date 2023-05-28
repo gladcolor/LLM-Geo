@@ -1,14 +1,14 @@
 import LLM_Geo_Constants as constants
 import helper
 import os
-import requests
+# import requests
 import networkx as nx
-import pandas as pd
-import geopandas as gpd
-from pyvis.network import Network
+# import pandas as pd
+# import geopandas as gpd
+# from pyvis.network import Network
 import openai
 import pickle
-
+import time
 
 class Solution():
     """
@@ -69,8 +69,78 @@ class Solution():
         self.direct_request_LLM_response = ''
         self.direct_request_code = ''
 
+        self.chat_history = [{'role': 'system', 'content': role}]
+
+    def get_LLM_reply(self,
+            prompt,
+            verbose=True,
+            temperature=1,
+            stream=True,
+            retry_cnt=3,
+            sleep_sec=10,
+            system_role=None,
+            model=None,
+            ):
+
+        openai.api_key = constants.OpenAI_key
+
+        if system_role is None:
+            system_role = self.role
+
+        if model is None:
+            model = self.model
+
+        # Query ChatGPT with the prompt
+        # if verbose:
+        #     print("Geting LLM reply... \n")
+        count = 0
+        isSucceed = False
+        self.chat_history.append({'role': 'user', 'content': prompt})
+        while (not isSucceed) and (count < retry_cnt):
+            try:
+                count += 1
+                response = openai.ChatCompletion.create(
+                    model=model,
+                    # messages=self.chat_history,  # Too many tokens to run.
+                    messages=[
+                                {"role": "system", "content": constants.operation_role},
+                                {"role": "user", "content": prompt},
+                              ],
+                    temperature=temperature,
+                    stream=stream,
+                )
+            except Exception as e:
+                # logging.error(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
+                print(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n",
+                      e)
+                time.sleep(sleep_sec)
+
+        response_chucks = []
+        if stream:
+            for chunk in response:
+                response_chucks.append(chunk)
+                content = chunk["choices"][0].get("delta", {}).get("content")
+                if content is not None:
+                    if verbose:
+                        print(content, end='')
+        else:
+            content = response["choices"][0]['message']["content"]
+            # print(content)
+        print('\n\n')
+        # print("Got LLM reply.")
+
+        response = response_chucks  # good for saving
+
+        content = helper.extract_content_from_LLM_reply(response)
+
+        self.chat_history.append({'role': 'assistant', 'content': content})
+
+        return response
+
+
     def get_LLM_response_for_graph(self, execuate=True):
-        response = helper.get_LLM_reply(
+        # self.chat_history.append()
+        response = self.get_LLM_reply(
                                         prompt=self.graph_prompt,
                                         system_role=self.role,
                                         model=self.model,
@@ -215,12 +285,14 @@ class Solution():
             
             operation_prompt = f'Your role: {constants.operation_role} \n' + \
                                f'operation_task: {constants.operation_task_prefix} {function_def["description"]} \n' + \
-                               f'This function is one step to solve the question: {self.task} \n' + \
+                               f'This function is one step to solve the question/task: {self.task} \n' + \
+                               f"This function is a operation node in a solution graph for the question/task, the Python code to build the graph is: \n{self.code_for_graph} \n" + \
                                f'Data locations: {self.data_locations_str} \n' + \
                                f'Reply example: {constants.operation_reply_exmaple} \n' + \
                                f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
                                f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
                                f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs}"
+
             
             operation_dict['operation_prompt'] = operation_prompt 
             self.operations.append(operation_dict)
@@ -238,10 +310,10 @@ class Solution():
         self.initial_operations()
         for idx, operation in enumerate(self.operations):
             node_name = operation['node_name']
-            print(f"{idx + 1} / {len(self.operations)}, {operation['node_name']}")
+            print(f"{idx + 1} / {len(self.operations)}, LLM is generating code for operation node: {operation['node_name']}")
             prompt = self.get_prompt_for_an_opearation(operation)
 
-            response = helper.get_LLM_reply(
+            response = self.get_LLM_reply(
                           prompt=prompt,
                           system_role=constants.operation_role,
                           model=self.model,
@@ -335,7 +407,8 @@ class Solution():
             print(f"\n\n-------------- Running code (trial # {count + 1}/{try_cnt}) --------------\n\n")
             try:
                 count += 1
-                exec(code)  #
+                exec(code, globals())  # #pass only globals() not locals()
+                #!!!!    all variables in code will become global variables! May cause huge issues!     !!!!
                 print("\n\n--------------- Done ---------------\n\n")
                 return code
             except Exception as e:

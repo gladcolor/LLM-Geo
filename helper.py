@@ -2,12 +2,12 @@ import re
 # import openai
 from collections import deque
 import openai
-import networkx as nx
+# import networkx as nx
 import logging
 import time
 
 import os
-import requests
+# import requests
 import networkx as nx
 import pandas as pd
 import geopandas as gpd
@@ -70,7 +70,7 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
                   system_role=r'You are a professional Geo-information scientist and developer.',
                   model=r"gpt-3.5-turbo",
                   verbose=True,
-                  tempratrue=0.5,
+                  temperature=1,
                   stream=True,
                   retry_cnt=3,
                   sleep_sec=10,
@@ -95,10 +95,12 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
                 {"role": "system", "content": system_role},
                 {"role": "user", "content": prompt},
                 ],
+                temperature=temperature,
                 stream=stream,
                 )
         except Exception as e:
-            logging.error(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
+            # logging.error(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
+            print(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
             time.sleep(sleep_sec)
 
 
