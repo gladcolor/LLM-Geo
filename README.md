@@ -80,7 +80,7 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 # To Do
 - Add more case studies.
 - Improve the prompt generation.
-- Implement autonmous data understanding module.
+- Implement autonomous data understanding module.
 - Implement autonomous data collection module.
 - Develop a web-based front-end user inteface
 - Test the integration of LLM-Geo with QGIS and ArcGIS.
