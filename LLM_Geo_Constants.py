@@ -48,6 +48,8 @@ graph_requirement = [
                         'You need spatial data (e.g., vector or raster) to make a map.',
                         'Do not put the GraphML writing process as a step in the graph.',
                         'Keep the graph concise, DO NOT use too many operation nodes.',
+                        # 'Keep the graph concise, DO NOT over-split task into too many small steps, especially for simple problems. For example, data loading and data transformation/preprocessing should be in one operation node.',
+
                          ]
 
 # other requirements prone to errors, not used for now
@@ -88,12 +90,12 @@ operation_requirement = [
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
-                        "Remember the column names and file names used in ancestor functions when joining tables.",
-                        "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
+                        "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
+                        # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        "Drop rows with NaN cells before using Pandas columns for processing (e.g. join or calculation), but need to report it.",
+                        "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                         "DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
                         "Use the built-in functions or attribute, if you do not remember, DO NOT make up fake ones, just use alternative methods.",
 
@@ -115,6 +117,7 @@ assembly_requirement = ['You can think step by step. ',
                     f"Save final  maps, if any. If use matplotlib, the function is: matplotlib.pyplot.savefig(*args, **kwargs).",  
                     f"The program is executable, put it in a function named 'assembely_solution()' then run it, but DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
                     "Use the built-in functions or attribute, if you do not remember, DO NOT make up fake ones, just use alternative methods.",
+                    "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                     ]
 
 #--------------- constants for direct request prompt generation  ---------------
@@ -143,12 +146,12 @@ direct_request_requirement = [
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
-                        "Remember the column names and file names used in ancestor functions when joining tables.",
-                        "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
+                        "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
+                        # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        "Drop rows with NaN cells before using Pandas columns for processing (e.g. join or calculation), but need to report it.",
+                        "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                         "The program is executable, put it in a function named 'direct_solution()' then run it, but DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
 
                         ]
@@ -160,21 +163,22 @@ debug_task_prefix = r'You need to correct the code of a program, then return the
 
 debug_requirement = [
                         'Correct the code. Revise the buggy parts, but not rewrite the entire program, expecially the function name, its arguments, and returns.',
-                        'You must use only one Python code block(enclosed by ```python and ```) to put the completed corrected program.',
+                        'You must return the complete corrected program in only one Python code block(enclosed by ```python and ```).',
                         'If using GeoPandas to load a zipped ESRI shapefile from a URL, the correct method is "gpd.read_file(URL)". DO NOT download and unzip the file.',
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "When doing spatial analysis, convert the involved spatial layers into the same map projection.",
                         "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
                         "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "If join DataFrame and GeoDataFrame, using common columns, DO NOT convert DataFrame to GeoDataFrame.",
+                        "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
                         "When joining tables, convert the involved columns to string type without leading zeros. ",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
-                        "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
+                        # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        "Drop rows with NaN cells before using Pandas columns for processing (e.g. join or calculation), but need to report it.",
+                        "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                         #
                         ]

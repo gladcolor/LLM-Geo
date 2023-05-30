@@ -9,6 +9,9 @@ import geopandas as gpd
 import openai
 import pickle
 import time
+import sys
+import traceback
+
 
 class Solution():
     """
@@ -58,10 +61,10 @@ class Solution():
         graph_requirement.append(f"Save the network into GraphML format, save it at: {self.graph_file}")
         graph_requirement_str =  '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(graph_requirement)])
         
-        graph_prompt = f'Your role: {self.role} \n' + \
-               f'Task: {constants.graph_task_prefix} \n {self.task} \n' + \
-               f'Your reply needs to meet these requirements: \n {graph_requirement_str} \n \n' + \
-               f'Reply example: {constants.graph_reply_exmaple}' + \
+        graph_prompt = f'Your role: {self.role} \n\n' + \
+               f'Your task: {constants.graph_task_prefix} \n {self.task} \n\n' + \
+               f'Your reply needs to meet these requirements: \n {graph_requirement_str} \n\n' + \
+               f'Your reply example: {constants.graph_reply_exmaple} \n\n' + \
                f'Data locations (each data is a node): {self.data_locations_str} \n'
         self.graph_prompt = graph_prompt
 
@@ -246,57 +249,58 @@ class Solution():
         operation_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(
             pre_requirements + constants.operation_requirement)])
 
-        operation_prompt = f'Your role: {constants.operation_role} \n' + \
-                           f'operation_task: {constants.operation_task_prefix} {operation["description"]} \n' + \
-                           f'This function is one step to solve the question: {self.task} \n' + \
-                           f'Data locations: {self.data_locations_str} \n' + \
-                           f'Reply example: {constants.operation_reply_exmaple} \n' + \
-                           f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
-                           f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
-                           f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs_str}"
+        operation_prompt = f'Your role: {constants.operation_role} \n\n' + \
+                           f'operation_task: {constants.operation_task_prefix} {operation["description"]} \n\n' + \
+                           f'This function is one step to solve the question/task: {self.task} \n\n' + \
+                           f"This function is a operation node in a solution graph for the question/task, the Python code to build the graph is: \n{self.code_for_graph} \n\n" + \
+                           f'Data locations: {self.data_locations_str} \n\n' + \
+                           f'Your reply example: {constants.operation_reply_exmaple} \n\n' + \
+                           f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n\n' + \
+                           f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes} \n\n" + \
+                           f"The descendant function (if any) definitions for the question are (node_name is function name): \n {descendant_defs_str}"
 
         operation['operation_prompt'] = operation_prompt
         return operation_prompt
         # self.operations.append(operation_dict)
-    def get_prompts_for_operations(self):
-        assert self.solution_graph, "Do not find solution graph!"
-        def_list, data_node_list = helper.generate_function_def_list(self.solution_graph)
-
-        
-        for idx, function_def in enumerate(def_list): 
-            operation_dict = function_def.copy()
-
-            node_name = function_def['node_name']
-
-            # get ancestors code
-            ancestor_operations = self.get_ancestor_operations(node_name)
-            ancestor_operation_codes = '\n'.join([oper['operation_code'] for oper in ancestor_operations])
-            descendant_operations = self.get_descendant_operations(node_name)
-            descendant_defs = self.get_descendant_operations_definition(descendant_operations)
-
-            pre_requirements = [
-                                f'The function description is: {function_def["description"]}',
-                                f'The function definition is: {function_def["function_definition"]}',
-                                f'The function return line is: {function_def["return_line"]}'
-                               ]
-            
-            operation_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(
-                pre_requirements + constants.operation_requirement)])
-            
-            operation_prompt = f'Your role: {constants.operation_role} \n' + \
-                               f'operation_task: {constants.operation_task_prefix} {function_def["description"]} \n' + \
-                               f'This function is one step to solve the question/task: {self.task} \n' + \
-                               f"This function is a operation node in a solution graph for the question/task, the Python code to build the graph is: \n{self.code_for_graph} \n" + \
-                               f'Data locations: {self.data_locations_str} \n' + \
-                               f'Reply example: {constants.operation_reply_exmaple} \n' + \
-                               f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
-                               f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
-                               f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs}"
-
-            
-            operation_dict['operation_prompt'] = operation_prompt 
-            self.operations.append(operation_dict)
-        return self.operations
+    # def get_prompts_for_operations(self):  ######## Not use ###########
+    #     assert self.solution_graph, "Do not find solution graph!"
+    #     def_list, data_node_list = helper.generate_function_def_list(self.solution_graph)
+    #
+    #
+    #     for idx, function_def in enumerate(def_list):
+    #         operation_dict = function_def.copy()
+    #
+    #         node_name = function_def['node_name']
+    #
+    #         # get ancestors code
+    #         ancestor_operations = self.get_ancestor_operations(node_name)
+    #         ancestor_operation_codes = '\n'.join([oper['operation_code'] for oper in ancestor_operations])
+    #         descendant_operations = self.get_descendant_operations(node_name)
+    #         descendant_defs = self.get_descendant_operations_definition(descendant_operations)
+    #
+    #         pre_requirements = [
+    #                             f'The function description is: {function_def["description"]}',
+    #                             f'The function definition is: {function_def["function_definition"]}',
+    #                             f'The function return line is: {function_def["return_line"]}'
+    #                            ]
+    #
+    #         operation_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(
+    #             pre_requirements + constants.operation_requirement)])
+    #
+    #         operation_prompt = f'Your role: {constants.operation_role} \n' + \
+    #                            f'operation_task: {constants.operation_task_prefix} {function_def["description"]} \n' + \
+    #                            f'This function is one step to solve the question/task: {self.task} \n' + \
+    #                            f"This function is a operation node in a solution graph for the question/task, the Python code to build the graph is: \n{self.code_for_graph} \n" + \
+    #                            f'Data locations: {self.data_locations_str} \n' + \
+    #                            f'Reply example: {constants.operation_reply_exmaple} \n' + \
+    #                            f'Your reply needs to meet these requirements: \n {operation_requirement_str} \n \n' + \
+    #                            f"The ancestor function code is (need to follow the generated file names and attribute names): \n {ancestor_operation_codes}" + \
+    #                            f"The descendant function definitions for the question are (node_name is function name): \n {descendant_defs}"
+    #
+    #
+    #         operation_dict['operation_prompt'] = operation_prompt
+    #         self.operations.append(operation_dict)
+    #     return self.operations
 
     # initial the oepartion list
     def initial_operations(self):
@@ -337,9 +341,9 @@ class Solution():
 
         assembly_requirement = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(constants.assembly_requirement)])
 
-        assembly_prompt = f"Your role: {constants.assembly_role} \n" + \
+        assembly_prompt = f"Your role: {constants.assembly_role} \n\n" + \
                           f"Your task is: use the given Python functions, return a complete Python program to solve the question: \n {self.task}" + \
-                          f"Requirement: \n {assembly_requirement} \n" + \
+                          f"Requirement: \n {assembly_requirement} \n\n" + \
                           f"Data location: \n {self.data_locations_str} \n" + \
                           f"Code: \n {all_operation_code_str}"
         
@@ -411,9 +415,16 @@ class Solution():
                 #!!!!    all variables in code will become global variables! May cause huge issues!     !!!!
                 print("\n\n--------------- Done ---------------\n\n")
                 return code
-            except Exception as e:
-                print("An error occurred: ", e)
-                debug_prompt = self.get_debug_prompt(exception=e, code=code)
+
+            # except SyntaxError as err:
+            #     error_class = err.__class__.__name__
+            #     detail = err.args[0]
+            #     line_number = err.lineno
+            #
+            except Exception as err:
+                print("An error occurred: ", err)
+
+                debug_prompt = self.get_debug_prompt(exception=err, code=code)
                 print("Sending error information to LLM for debugging...")
                 # print("Prompt:\n", debug_prompt)
                 response = helper.get_LLM_reply(prompt=debug_prompt,
@@ -429,16 +440,27 @@ class Solution():
 
 
     def get_debug_prompt(self, exception, code):
+        error_class = exception.__class__.__name__
+        detail = exception.args[0]
+        cl, exc, tb = sys.exc_info()
+        line_number = traceback.extract_tb(tb)[-1][1]
+        # print("traceback.extract_tb:", traceback.extract_tb)
+        # print("traceback:", traceback)
+        stk = traceback.extract_tb(tb, -1)
+        function_name = stk[-1][2]
 
+        exception_info_str = f"Traceback: {traceback.extract_tb(tb)[1:]}; class: {error_class}; details:{detail}."
+
+        # print("Error infor: ", exception_info_str)
 
         debug_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(constants.debug_requirement)])
 
         debug_prompt = f"Your role: {constants.debug_role} \n" + \
-                          f"Your task is: correct the code of a program according to the error information, then return the corrected and completed  program. \n" + \
-                          f"Your will receive the code for this task: {self.task} \n" + \
-                          f"Data location: \n {self.data_locations_str} \n" + \
-                          f"Requirement: \n {debug_requirement_str} \n" + \
-                          f"The code have some errors, the error information is:  {exception} \n" + \
+                          f"Your task: correct the code of a program according to the error information, then return the corrected and completed  program. \n\n" + \
+                          f"Requirement: \n {debug_requirement_str} \n\n" + \
+                          f"Your will receive the code for this task: {self.task} \n\n" + \
+                          f"Data location: \n {self.data_locations_str} \n\n" + \
+                          f"The code have some errors, the error information is:  {exception_info_str} \n\n" + \
                           f"The code is: \n{code}"
 
         return debug_prompt
