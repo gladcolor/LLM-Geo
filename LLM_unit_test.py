@@ -6,6 +6,8 @@ import pickle
 import os
 import networkx as nx
 from LLM_Geo_kernel import Solution
+import sys
+import traceback
 
 class MyTestCase(unittest.TestCase):
     def test_get_LLM_response_for_graph(self):
@@ -97,6 +99,43 @@ class MyTestCase(unittest.TestCase):
         code = helper.extract_code(response=response)
         print("-------------- Code ---------------: \n", code)
         self.assertEqual(True, True)
+
+
+
+
+    def error_test(self):
+        code = """a = 1/0
+                """
+        exec(code)
+    def test_Error_exception(self):
+        try:
+            self.error_test()
+        except Exception as e:
+            error_class = e.__class__.__name__
+            detail = e.args[0]
+            cl, exc, tb = sys.exc_info()
+            # message = traceback.StackSummary.extract(tb)
+            # print(message)
+            #
+
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback_details = traceback.extract_tb(exc_traceback)
+
+            filename = traceback_details[-1].filename
+            line_number = traceback_details[-1].lineno
+            function_name = traceback_details[-1].name
+            print(f"Exception occurred in file: {filename}")
+            print(f"Line number: {line_number}")
+            print(f"Function that caused the exception: {function_name}")
+            print(f"Exception type: {exc_type.__name__}")
+            print(f"Exception message: {exc_value}")
+
+            line = traceback_details[0].line
+            print(f"Line of code that caused the exception: {line}")
+
+        self.assertEqual(True, True)
+
+
 
 if __name__ == '__main__':
     unittest.main()

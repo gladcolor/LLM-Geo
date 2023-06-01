@@ -406,12 +406,14 @@ class Solution():
         return self.direct_request_LLM_response
 
     def execute_complete_program(self, code: str, try_cnt: int = 10) -> str:
+
         count = 0
         while count < try_cnt:
             print(f"\n\n-------------- Running code (trial # {count + 1}/{try_cnt}) --------------\n\n")
             try:
                 count += 1
-                exec(code, globals())  # #pass only globals() not locals()
+                compiled_code = compile(code, 'Complete program', 'exec')
+                exec(compiled_code, globals())  # #pass only globals() not locals()
                 #!!!!    all variables in code will become global variables! May cause huge issues!     !!!!
                 print("\n\n--------------- Done ---------------\n\n")
                 return code
@@ -422,7 +424,14 @@ class Solution():
             #     line_number = err.lineno
             #
             except Exception as err:
-                print("An error occurred: ", err)
+
+                # cl, exc, tb = sys.exc_info()
+
+                # print("An error occurred: ", traceback.extract_tb(tb))
+
+                if count == try_cnt:
+                    print(f"Failed to execute and debug the code within {try_cnt} times.")
+                    return code
 
                 debug_prompt = self.get_debug_prompt(exception=err, code=code)
                 print("Sending error information to LLM for debugging...")
@@ -435,32 +444,38 @@ class Solution():
                                                 retry_cnt=5,
                                                 )
                 code = helper.extract_code(response)
-                # self.execute_complete_program(code, try_cnt=(try_cnt - count))
+
         return code
 
 
     def get_debug_prompt(self, exception, code):
-        error_class = exception.__class__.__name__
-        detail = exception.args[0]
-        cl, exc, tb = sys.exc_info()
-        line_number = traceback.extract_tb(tb)[-1][1]
-        # print("traceback.extract_tb:", traceback.extract_tb)
-        # print("traceback:", traceback)
-        stk = traceback.extract_tb(tb, -1)
-        function_name = stk[-1][2]
+        etype, exc, tb = sys.exc_info()
+        exttb = traceback.extract_tb(tb)  # Do not quite understand this part.
 
-        exception_info_str = f"Traceback: {traceback.extract_tb(tb)[1:]}; class: {error_class}; details:{detail}."
+        ## Fill the missing data:
+        exttb2 = [(fn, lnnr, funcname,
+                   (code.splitlines()[lnnr - 1] if fn == 'Complete program'
+                    else line))
+                  for fn, lnnr, funcname, line in exttb]
 
-        # print("Error infor: ", exception_info_str)
+        # Print:
+        error_info_str = 'Traceback (most recent call last):\n'
+        # sys.stderr.write('Traceback (most recent call last):\n')
+        for line in traceback.format_list(exttb2[1:]):
+            error_info_str += line
+        for line in traceback.format_exception_only(etype, exc):
+            error_info_str += line
+
+        print(f"error_info_str: \n{error_info_str}")
 
         debug_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(constants.debug_requirement)])
 
         debug_prompt = f"Your role: {constants.debug_role} \n" + \
-                          f"Your task: correct the code of a program according to the error information, then return the corrected and completed  program. \n\n" + \
+                          f"Your task: correct the code of a program according to the error information, then return the corrected and completed program. \n\n" + \
                           f"Requirement: \n {debug_requirement_str} \n\n" + \
-                          f"Your will receive the code for this task: {self.task} \n\n" + \
-                          f"Data location: \n {self.data_locations_str} \n\n" + \
-                          f"The code have some errors, the error information is:  {exception_info_str} \n\n" + \
+                          f"The given code is used for this task: {self.task} \n\n" + \
+                          f"The data location associated with the given code: \n {self.data_locations_str} \n\n" + \
+                          f"The error information for the code is: \n{str(error_info_str)} \n\n" + \
                           f"The code is: \n{code}"
 
         return debug_prompt
