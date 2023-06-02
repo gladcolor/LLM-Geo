@@ -24,7 +24,8 @@ If you have difficulties to install `GeoPandas` in Windows, refer to this [post]
 - Download all files, put your question to the `TASK` variable in LLM-Geo4.ipynb.
 - Set the `task_name` in the notebook. Space is not allowed. LLM-Geo will create the fold using the `task_name' to save results.
 - Run all cells.
-- LLM-Geo will use the backed LLM (GPT-4 now) to debug the generated program if errors occur. GPT-4's debugging ability is still weak. The default maximum attempt count is set to 10, modify this value is needed.   
+- LLM-Geo will use the backed LLM (GPT-4 now) to review and debug the generated program. GPT-4's debugging ability is still weak. The default maximum attempt count is set to 10, modify this value is needed. 
+- Note that solution based on graph, code review, and debug will cost a lot of tokens. We provide a Jupyter notebook [(Direct_request_LLM.ipynb)](https://github.com/gladcolor/LLM-Geo/blob/master/Direct_request_LLM.ipynb) to directly request solutions from LLM. This is a much more quick way to get solutions for simple tasks/questions, but its robustness may slightly lower.
 
 # Case studies
 These case studies are carefully designed to show the concepts of autonomous GIS. Please use GPT-4; the lower version of GPT will fail to generate correct code and results. Note everytime GPT-4 generate different outputs, so your results may look different. Per our test, the generated program may not success everytime, but there is 80% chance to run successfully. If input the generated prompts to the ChatGPT-4 chat box rather than API, the success rate will be much higher. We will improve the overall workflow of LLM-Geo, currently we do not push the entire historical conversation (i.e., sufficient information) to the GPT-4 API.
