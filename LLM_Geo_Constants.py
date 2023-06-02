@@ -180,5 +180,41 @@ debug_requirement = [
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
                         "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                        "Drop rows with Nan cells if the error information reports NaN related errors."
+                        #
+                        ]
+
+#--------------- constants for operation review prompt generation  ---------------
+operation_review_role = graph_role
+
+operation_review_task_prefix = r'Review the code of a function to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
+
+operation_review_requirement = [
+                        'Review the code very carefully to ensure is correctness and robustness.',
+                        'If the code has not error, return the "PASS" only, without any other explanation or description.',
+                        'If you modified the code, return the complete corrected function. All returned code need to be inside only one Python code block (enclosed by ```python and ```).',
+                        'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
+                        'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
+                        'Pay extra attention on the common field names when joining Pandas DataFrame.',
+                        'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
+                        'Revise the buggy parts, but not rewrite the entire function, MUST keep the function name, its arguments, and returns.',
+                 #
+                        ]
+
+#--------------- constants for assembly program review prompt generation  ---------------
+assembly_review_role = graph_role
+
+assembly_review_task_prefix = r'Review the code of a program to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
+
+assembly_review_requirement = [
+                        'Review the code very carefully to ensure is correctness and robustness.',
+                        'If the code has not error, return the "PASS" only, without any other explanation or description.',
+                        'If you modified the code, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
+                        'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
+                        'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
+                        'Pay extra attention on the common field names when joining Pandas DataFrame.',
+                        'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
+                        'Revise the buggy parts, but DO NOT rewrite the entire program or functions, MUST keep the function name, its arguments, and returns.',
+
                         #
                         ]

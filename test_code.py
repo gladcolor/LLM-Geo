@@ -123,6 +123,8 @@ class LLM_Test():
                   for fn, lnnr, funcname, line in exttb]
 
         # Print:
+        print(f"traceback.format_exc():\n{traceback.format_exc()}")
+
         error_info_str = 'Traceback (most recent call last):\n'
         # sys.stderr.write('Traceback (most recent call last):\n')
         for line in traceback.format_list(exttb2[1:]):

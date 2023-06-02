@@ -309,7 +309,7 @@ class Solution():
         for node_name in operation_names:
             function_def_returns = helper.generate_function_def(node_name, self.solution_graph)
             self.operations.append(function_def_returns)
-    def get_LLM_responses_for_operations(self):
+    def get_LLM_responses_for_operations(self, review=True):
         # def_list, data_node_list = helper.generate_function_def_list(self.solution_graph)
         self.initial_operations()
         for idx, operation in enumerate(self.operations):
@@ -330,6 +330,9 @@ class Solution():
             except Exception as e:
                 operation_code = ""
             operation['operation_code'] = operation_code
+
+            if review:
+                operation = self.ask_LLM_to_review_operation_code(operation)
             
         return self.operations
 
@@ -351,7 +354,7 @@ class Solution():
         return self.assembly_prompt
     
     
-    def get_LLM_assembly_response(self):
+    def get_LLM_assembly_response(self, review=True):
         self.prompt_for_assembly_program()
         assembly_LLM_response = helper.get_LLM_reply(self.assembly_prompt,
                           system_role=constants.assembly_role,
@@ -367,6 +370,9 @@ class Solution():
                 code_for_assembly = ""
                 
         self.code_for_assembly = code_for_assembly
+
+        if review:
+            self.ask_LLM_to_review_assembly_code()
         
         return self.assembly_LLM_response
     
@@ -451,6 +457,7 @@ class Solution():
     def get_debug_prompt(self, exception, code):
         etype, exc, tb = sys.exc_info()
         exttb = traceback.extract_tb(tb)  # Do not quite understand this part.
+        # https://stackoverflow.com/questions/39625465/how-do-i-retain-source-lines-in-tracebacks-when-running-dynamically-compiled-cod/39626362#39626362
 
         ## Fill the missing data:
         exttb2 = [(fn, lnnr, funcname,
@@ -460,13 +467,14 @@ class Solution():
 
         # Print:
         error_info_str = 'Traceback (most recent call last):\n'
-        # sys.stderr.write('Traceback (most recent call last):\n')
         for line in traceback.format_list(exttb2[1:]):
             error_info_str += line
         for line in traceback.format_exception_only(etype, exc):
             error_info_str += line
 
-        print(f"error_info_str: \n{error_info_str}")
+        print(f"Error_info_str: \n{error_info_str}")
+
+        # print(f"traceback.format_exc():\n{traceback.format_exc()}")
 
         debug_requirement_str = '\n'.join([f"{idx + 1}. {line}" for idx, line in enumerate(constants.debug_requirement)])
 
@@ -479,6 +487,69 @@ class Solution():
                           f"The code is: \n{code}"
 
         return debug_prompt
+
+    def ask_LLM_to_review_operation_code(self, operation):
+        code = operation['operation_code']
+        operation_prompt = operation['operation_prompt']
+        review_requirement_str = '\n'.join(
+            [f"{idx + 1}. {line}" for idx, line in enumerate(constants.operation_review_requirement)])
+        review_prompt = f"Your role: {constants.operation_review_role} \n" + \
+                          f"Your task: {constants.operation_review_task_prefix} \n\n" + \
+                          f"Requirement: \n{review_requirement_str} \n\n" + \
+                          f"The code is: \n----------\n{code}\n----------\n\n" + \
+                          f"The requirements for the code is: \n----------\n{operation_prompt} \n----------\n"
+
+            # {node_name: "", function_descption: "", function_definition:"", return_line:""
+        # operation_prompt:"", operation_code:""}
+        print("LLM is reviewing the operation code... \n")
+        print(f"review_prompt:\n{review_prompt}")
+        response = helper.get_LLM_reply(prompt=review_prompt,
+                                        system_role=constants.operation_review_role,
+                                        model=self.model,
+                                        verbose=True,
+                                        stream=True,
+                                        retry_cnt=5,
+                                        )
+        new_code = helper.extract_code(response)
+        reply_content = helper.extract_content_from_LLM_reply(response)
+        if (reply_content == "PASS") or (new_code == ""):  # if no modification.
+            print("Code review passed, no revision.")
+            new_code = code
+        operation['code'] = new_code
+
+        return operation
+
+    def ask_LLM_to_review_assembly_code(self):
+        code = self.code_for_assembly
+        assembly_prompt = self.assembly_prompt
+        review_requirement_str = '\n'.join(
+            [f"{idx + 1}. {line}" for idx, line in enumerate(constants.assembly_review_requirement)])
+        review_prompt = f"Your role: {constants.assembly_review_role} \n" + \
+                          f"Your task: {constants.assembly_review_task_prefix} \n\n" + \
+                          f"Requirement: \n{review_requirement_str} \n\n" + \
+                          f"The code is: \n----------\n{code} \n----------\n\n" + \
+                          f"The requirements for the code is: \n----------\n{assembly_prompt} \n----------\n\n"
+
+        print("LLM is reviewing the assembly code... \n")
+        print(f"review_prompt:\n{review_prompt}")
+        response = helper.get_LLM_reply(prompt=review_prompt,
+                                        system_role=constants.assembly_review_role,
+                                        model=self.model,
+                                        verbose=True,
+                                        stream=True,
+                                        retry_cnt=5,
+                                        )
+        new_code = helper.extract_code(response)
+        if (new_code == "PASS") or (new_code == ""):  # if no modification.
+            print("Code review passed, no revision.")
+            new_code = code
+
+        self.code_for_assembly = new_code
+
+
+
+
+
 
 
 
