@@ -397,7 +397,7 @@ class Solution():
                            f'Your reply needs to meet these requirements: \n {direct_request_requirement_str} \n'
         return direct_request_prompt
 
-    def get_direct_request_LLM_response(self):
+    def get_direct_request_LLM_response(self, review=True):
 
         response = helper.get_LLM_reply(prompt=self.direct_request_prompt,
                                         model=self.model,
@@ -408,6 +408,9 @@ class Solution():
         self.direct_request_LLM_response = response
 
         self.direct_request_code = helper.extract_code(response=response)
+
+        if review:
+            self.ask_LLM_to_review_direct_code()
 
         return self.direct_request_LLM_response
 
@@ -502,7 +505,7 @@ class Solution():
             # {node_name: "", function_descption: "", function_definition:"", return_line:""
         # operation_prompt:"", operation_code:""}
         print("LLM is reviewing the operation code... \n")
-        print(f"review_prompt:\n{review_prompt}")
+        # print(f"review_prompt:\n{review_prompt}")
         response = helper.get_LLM_reply(prompt=review_prompt,
                                         system_role=constants.operation_review_role,
                                         model=self.model,
@@ -513,7 +516,7 @@ class Solution():
         new_code = helper.extract_code(response)
         reply_content = helper.extract_content_from_LLM_reply(response)
         if (reply_content == "PASS") or (new_code == ""):  # if no modification.
-            print("Code review passed, no revision.")
+            print("Code review passed, no revision.\n\n")
             new_code = code
         operation['code'] = new_code
 
@@ -531,7 +534,7 @@ class Solution():
                           f"The requirements for the code is: \n----------\n{assembly_prompt} \n----------\n\n"
 
         print("LLM is reviewing the assembly code... \n")
-        print(f"review_prompt:\n{review_prompt}")
+        # print(f"review_prompt:\n{review_prompt}")
         response = helper.get_LLM_reply(prompt=review_prompt,
                                         system_role=constants.assembly_review_role,
                                         model=self.model,
@@ -541,12 +544,37 @@ class Solution():
                                         )
         new_code = helper.extract_code(response)
         if (new_code == "PASS") or (new_code == ""):  # if no modification.
-            print("Code review passed, no revision.")
+            print("Code review passed, no revision.\n\n")
             new_code = code
 
         self.code_for_assembly = new_code
 
+    def ask_LLM_to_review_direct_code(self):
+        code = self.direct_request_code
+        direct_prompt = self.direct_request_prompt
+        review_requirement_str = '\n'.join(
+            [f"{idx + 1}. {line}" for idx, line in enumerate(constants.direct_review_requirement)])
+        review_prompt = f"Your role: {constants.direct_review_role} \n" + \
+                          f"Your task: {constants.direct_review_task_prefix} \n\n" + \
+                          f"Requirement: \n{review_requirement_str} \n\n" + \
+                          f"The code is: \n----------\n{code} \n----------\n\n" + \
+                          f"The requirements for the code is: \n----------\n{direct_prompt} \n----------\n\n"
 
+        print("LLM is reviewing the direct request code... \n")
+        # print(f"review_prompt:\n{review_prompt}")
+        response = helper.get_LLM_reply(prompt=review_prompt,
+                                        system_role=constants.direct_review_role,
+                                        model=self.model,
+                                        verbose=True,
+                                        stream=True,
+                                        retry_cnt=5,
+                                        )
+        new_code = helper.extract_code(response)
+        if (new_code == "PASS") or (new_code == ""):  # if no modification.
+            print("Code review passed, no revision.\n\n")
+            new_code = code
+
+        self.direct_request_code = new_code
 
 
 

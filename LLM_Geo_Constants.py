@@ -163,6 +163,7 @@ debug_task_prefix = r'You need to correct the code of a program, then return the
 
 debug_requirement = [
                         'Correct the code. Revise the buggy parts, but not rewrite the entire program, expecially the function name, its arguments, and returns.',
+                        'Elaborate your reasons for revision.',
                         'You must return the complete corrected program in only one Python code block(enclosed by ```python and ```).',
                         'If using GeoPandas to load a zipped ESRI shapefile from a URL, the correct method is "gpd.read_file(URL)". DO NOT download and unzip the file.',
                         "Note module 'pandas' has no attribute 'StringIO'",
@@ -190,14 +191,15 @@ operation_review_role = graph_role
 operation_review_task_prefix = r'Review the code of a function to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
 
 operation_review_requirement = [
-                        'Review the code very carefully to ensure is correctness and robustness.',
-                        'If the code has not error, return the "PASS" only, without any other explanation or description.',
+                        'Review the code very carefully to ensure its correctness and robustness.',
+                        'Elaborate your reasons for revision.',
+                        'If the code has no error, and you do not need to modify the code, DO NOT return code, return "PASS" only, without any other explanation or description.',
                         'If you modified the code, return the complete corrected function. All returned code need to be inside only one Python code block (enclosed by ```python and ```).',
                         'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
                         'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
                         'Pay extra attention on the common field names when joining Pandas DataFrame.',
                         'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
-                        'Revise the buggy parts, but not rewrite the entire function, MUST keep the function name, its arguments, and returns.',
+                        'Revise the buggy parts, but DO NOT rewrite the entire function, MUST keep the function name, its arguments, and returns.',
                  #
                         ]
 
@@ -207,8 +209,9 @@ assembly_review_role = graph_role
 assembly_review_task_prefix = r'Review the code of a program to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
 
 assembly_review_requirement = [
-                        'Review the code very carefully to ensure is correctness and robustness.',
-                        'If the code has not error, return the "PASS" only, without any other explanation or description.',
+                        'Review the code very carefully to ensure its correctness and robustness.',
+                        'Elaborate your reasons for revision.',
+                        'If the code has no error, and you do not need to modify the code, DO NOT return code, return "PASS" only, without any other explanation or description.',
                         'If you modified the code, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
                         'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
                         'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
@@ -216,5 +219,22 @@ assembly_review_requirement = [
                         'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
                         'Revise the buggy parts, but DO NOT rewrite the entire program or functions, MUST keep the function name, its arguments, and returns.',
 
+                        #
+                        ]
+
+#--------------- constants for direct program review prompt generation  ---------------
+direct_review_role = graph_role
+
+direct_review_task_prefix = r'Review the code of a program to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
+
+direct_review_requirement = [
+                        'Review the code very carefully to ensure its correctness and robustness.',
+                        'Elaborate your reasons for revision.',
+                        'If the code has no error, and you do not need to modify the code, DO NOT return code, return "PASS" only, without any other explanation or description.',
+                        'If you modified the code, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
+                        'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
+                        'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
+                        'Pay extra attention on the common field names when joining Pandas DataFrame.',
+                        'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
                         #
                         ]
