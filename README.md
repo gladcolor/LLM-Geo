@@ -15,14 +15,14 @@ Note:  We are still developing LLM-Geo, and the ideas presented in the paper may
 
 # Installation
 
-Clone or download the repository, rename `your_config.ini` as `config.ini`. Then put your OpenAI API key in the `config.ini` file. Please use GPT-4, the lower versions such as 3.5 do no have enougth reaasoning ability to generate correct solution graph and operation code.
+Clone or download the repository, rename `your_config.ini` as `config.ini`. Then put your OpenAI API key in the `config.ini` file. Please use GPT-4, the lower versions such as 3.5 do no have enougth reasoning ability to generate correct solution graph and operation code.
 
 If you have difficulties to install `GeoPandas` in Windows, refer to this [post](https://geoffboeing.com/2014/09/using-geopandas-windows/). 
 
 
 # How to use
 - Download all files, put your question to the `TASK` variable in LLM-Geo4.ipynb.
-- Set the `task_name` in the notebook. Space is not allowed. LLM-Geo will create the fold using the `task_name' to save results.
+- Set the `task_name` in the notebook. Space is not allowed. LLM-Geo will create the fold using the `task_name` to save results.
 - Run all cells.
 - LLM-Geo will use the backed LLM (GPT-4 now) to review and debug the generated program. GPT-4's debugging ability is still weak. The default maximum attempt count is set to 10, modify this value is needed. 
 - Note that solution based on graph, code review, and debug will cost a lot of tokens. We provide a Jupyter notebook [(Direct_request_LLM.ipynb)](https://github.com/gladcolor/LLM-Geo/blob/master/Direct_request_LLM.ipynb) to directly request solutions from LLM. This is a much more quick way to get solutions for simple tasks/questions, but its robustness may slightly lower.
