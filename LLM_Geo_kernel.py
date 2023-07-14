@@ -578,6 +578,33 @@ class Solution():
 
 
 
+        
+    def ask_LLM_to_sample_data(self, operation_code):
 
+
+        sampling_data_requirement_str = '\n'.join(
+            [f"{idx + 1}. {line}" for idx, line in enumerate(constants.sampling_data_requirement)])
+        sampling_data_review_prompt = f"Your role: {constants.sampling_data_role} \n" + \
+                          f"Your task: {constants.sampling_task_prefix} \n\n" + \
+                          f"Requirement: \n{sampling_data_requirement_str} \n\n" + \
+                          f"The function code is: \n----------\n{code} \n----------\n\n" #+ \
+                          # f"The requirements for the code is: \n----------\n{sampling_data_requirement_str} \n----------\n\n"
+
+        print("LLM is reviewing the direct request code... \n")
+        # print(f"review_prompt:\n{review_prompt}")
+        response = helper.get_LLM_reply(prompt=sampling_data_review_prompt,
+                                        system_role=constants.sampling_data_role,
+                                        model=self.model,
+                                        verbose=True,
+                                        stream=True,
+                                        retry_cnt=5,
+                                        )
+        code = helper.extract_code(response)
+        return code
+        # if (new_code == "PASS") or (new_code == ""):  # if no modification.
+        #     print("Code review passed, no revision.\n\n")
+        #     new_code = code
+
+        # self.direct_request_code = new_code
 
 

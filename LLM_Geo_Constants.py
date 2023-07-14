@@ -90,14 +90,16 @@ operation_requirement = [
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
+                        "Keep the needed table columns for the further steps.",
                         "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
                         # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                        # "Drop rows with NaN cells, i.e., df.dropna(),  before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                         "DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
                         "Use the built-in functions or attribute, if you do not remember, DO NOT make up fake ones, just use alternative methods.",
+                        "Pandas library has no attribute 'StringIO', so 'pd.compat.StringIO' is wrong, you need to use 'io.StringIO' instead.",
 
                         ]
 # other requirements prone to errors, not used for now
@@ -117,7 +119,7 @@ assembly_requirement = ['You can think step by step. ',
                     f"Save final  maps, if any. If use matplotlib, the function is: matplotlib.pyplot.savefig(*args, **kwargs).",  
                     f"The program is executable, put it in a function named 'assembely_solution()' then run it, but DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
                     "Use the built-in functions or attribute, if you do not remember, DO NOT make up fake ones, just use alternative methods.",
-                    "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                    # "Drop rows with NaN cells, i.e., df.dropna(),  before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                     ]
 
 #--------------- constants for direct request prompt generation  ---------------
@@ -151,7 +153,7 @@ direct_request_requirement = [
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                        # "Drop rows with NaN cells, i.e., df.dropna(), before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                         "The program is executable, put it in a function named 'direct_solution()' then run it, but DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
 
                         ]
@@ -162,9 +164,9 @@ debug_role = graph_role
 debug_task_prefix = r'You need to correct the code of a program, then return the complete corrected code. '
 
 debug_requirement = [
-                        'Correct the code. Revise the buggy parts, but not rewrite the entire program, expecially the function name, its arguments, and returns.',
+                        'Correct the code. Revise the buggy parts, but need to keep program structure, i.e., the function name, its arguments, and returns.',
                         'Elaborate your reasons for revision.',
-                        'You must return the complete corrected program in only one Python code block(enclosed by ```python and ```).',
+                        'You must return the complete corrected program in only one Python code block(enclosed by ```python and ```); DO NOT return the revised part only.',
                         'If using GeoPandas to load a zipped ESRI shapefile from a URL, the correct method is "gpd.read_file(URL)". DO NOT download and unzip the file.',
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "When doing spatial analysis, convert the involved spatial layers into the same map projection.",
@@ -180,8 +182,8 @@ debug_requirement = [
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
                         "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        "Drop rows with NaN cells before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
-                        "Drop rows with Nan cells if the error information reports NaN related errors."
+                        # "Drop rows with NaN cells, i.e., df.dropna(),  before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                        # "Drop rows with NaN cells, i.e., df.dropna(),  if the error information reports NaN related errors."
                         #
                         ]
 
@@ -196,7 +198,7 @@ operation_review_requirement = [
                         'If the code has no error, and you do not need to modify the code, DO NOT return code, return "PASS" only, without any other explanation or description.',
                         'If you modified the code, return the complete corrected function. All returned code need to be inside only one Python code block (enclosed by ```python and ```).',
                         'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
-                        'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
+                        'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal, in the used Pandas columns.',
                         'Pay extra attention on the common field names when joining Pandas DataFrame.',
                         'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
                         'Revise the buggy parts, but DO NOT rewrite the entire function, MUST keep the function name, its arguments, and returns.',
@@ -212,7 +214,7 @@ assembly_review_requirement = [
                         'Review the code very carefully to ensure its correctness and robustness.',
                         'Elaborate your reasons for revision.',
                         'If the code has no error, and you do not need to modify the code, DO NOT return code, return "PASS" only, without any other explanation or description.',
-                        'If you modified the code, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
+                        'If you modified the code, DO NOT reture the revised part only; instead, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
                         'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
                         'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
                         'Pay extra attention on the common field names when joining Pandas DataFrame.',
@@ -238,3 +240,18 @@ direct_review_requirement = [
                         'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
                         #
                         ]
+
+
+#--------------- constants for sampling data prompt generation  ---------------
+sampling_data_role = graph_role
+
+sampling_task_prefix = r"Given a function, write a program to run this function, then sample the returned data of the function. The program needs to be run by another Python program via exec() function, and the sampled data will be stored in a variable."
+
+sampling_data_requirement = [
+                        'Return all sampled data in a string variable named "sampled_data", i.e., sampled_data=given_function().',
+                        'The data usually are tables or vectors. You need to sample the top 5 record of the table (e.g., CSV file or vector attritube table) If the data is a vector, return the map projection information.',
+                        'The sampled data format is: "Map projection: XXX. Sampled data: XXX',
+ 
+                        #
+                        ]
+
