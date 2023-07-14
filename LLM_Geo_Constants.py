@@ -214,7 +214,7 @@ assembly_review_requirement = [
                         'Review the code very carefully to ensure its correctness and robustness.',
                         'Elaborate your reasons for revision.',
                         'If the code has no error, and you do not need to modify the code, DO NOT return code, return "PASS" only, without any other explanation or description.',
-                        'If you modified the code, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
+                        'If you modified the code, DO NOT reture the revised part only; instead, return the complete corrected program. All returned code need to be inside only one Python code block (enclosed by ```python and ```)',
                         'DO NOT use more than one Python code blocks in your reply, because I need to extract the complete Python code in the Python code block.',
                         'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
                         'Pay extra attention on the common field names when joining Pandas DataFrame.',
