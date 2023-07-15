@@ -30,6 +30,14 @@ If you have difficulties to install `GeoPandas` in Windows, refer to this [post]
 # Case studies
 These case studies are carefully designed to show the concepts of autonomous GIS. Please use GPT-4; the lower version of GPT will fail to generate correct code and results. Note everytime GPT-4 generate different outputs, so your results may look different. Per our test, the generated program may not success everytime, but there is 80% chance to run successfully. If input the generated prompts to the ChatGPT-4 chat box rather than API, the success rate will be much higher. We will improve the overall workflow of LLM-Geo, currently we do not push the entire historical conversation (i.e., sufficient information) to the GPT-4 API.
 
+Video demonstrations for the case studies
+
+Case 1: https://youtu.be/ot9oA_6Llys
+
+Case 2: https://youtu.be/ut4XkMcqgvQ
+
+Case 3: https://youtu.be/4q0a9xKk8Ug
+
 ## Case 1: Counting population living near hazardous wastes.
 This spatial problem is to find out the population living with hazardous wastes and map their distribution. The study area is North Carolina, United States (US). We input the task (question) to LLM-Geo as:
 ```
