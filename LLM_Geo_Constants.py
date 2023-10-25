@@ -10,7 +10,9 @@ OpenAI_key = config.get('API_Key', 'OpenAI_key')
 # carefully change these prompt parts!   
 
 #--------------- constants for graph generation  ---------------
-graph_role = r'A professional Geo-information scientist and developer good at Python.'
+graph_role = r'''A professional Geo-information scientist and developer good at Python. You have worked on Geographic 
+information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. You have significant experence on graph theory, application, and implementation. You are also experienced on generating map.
+'''
 
 graph_task_prefix = r'Generate a graph (data structure) only, whose nodes are (1) a series of consecutive steps and (2) data to solve this question: '
 
@@ -60,7 +62,12 @@ graph_requirement = [
 
 
 #--------------- constants for operation generation  ---------------
-operation_role = graph_role
+operation_role = r'''A professional Geo-information scientist and developer good at Python. You have worked on 
+Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. 
+Yor program is always robust, considering the various data circumstances. You have an good feeling of overview, 
+meaning the functions in your program is coherent, and they connect to each other well, such as function names, 
+parameters types, and the calling orders. You are also super experienced on generating maps using code.
+'''
 
 operation_task_prefix = r'You need to generate a Python function to do: '
 
@@ -83,35 +90,40 @@ operation_requirement = [
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "Use the latest Python module methods.",
                         "When doing spatial analysis, convert the involved spatial layers into the same map projection.",
-                        "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
+                        # "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
                         "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "If join DataFrame and GeoDataFrame, using common columns, DO NOT convert DataFrame to GeoDataFrame.",
-                        "When joining tables, convert the involved columns to string type without leading zeros. ",
+                        # "When joining tables, convert the involved columns to string type without leading zeros. ",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
-                        "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
+                        # "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
                         "Keep the needed table columns for the further steps.",
-                        "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
-                        # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
+                        "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",                        
                         "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
-                        "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
-                        "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        # "Drop rows with NaN cells, i.e., df.dropna(),  before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                        "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ", 
                         "DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
-                        "Use the built-in functions or attribute, if you do not remember, DO NOT make up fake ones, just use alternative methods.",
+                        "Use the built-in functions or attribute. If you do not remember, DO NOT make up fake ones, just use alternative methods.",
                         "Pandas library has no attribute 'StringIO', so 'pd.compat.StringIO' is wrong, you need to use 'io.StringIO' instead.",
-
+                        "Before using Pandas or GeoPandas columns for further processing (e.g. join or calculation), drop recoreds with NaN cells in that column, i.e., df.dropna(columns=['XXX']).",
+                        "When read FIPS or GEOID columns from CSV files, read those columns as str, never as float.",
+                        "If joining FIPS or GEOID, need to fill the leading zeros (digits: state: 2, county: 5, tract: 11, block group: 12."
                         ]
 # other requirements prone to errors, not used for now
 """
 If joining FIPS or GEOID, need to fill the leading zeros (digits: state: 2, county: 5, tract: 11, block group: 12.
 "Create a copy or use .loc to avoid SettingWithCopyWarning when using pandas DataFrames."
 "When creating maps or graphs, make them looks beautiful and professional. Carefuly select color, and show the layout, aspect, size, legend, scale bar, colorbar, background, annotation, axis ticks, title, font size, and label appropriately, but not overloaded."
+ "Drop rows with NaN cells, i.e., df.dropna(),  before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+ # "GEOID in US Census data and FIPS in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
+ # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
 """
 
 
 #--------------- constants for assembly prompt generation  ---------------
-assembly_role = graph_role
+assembly_role =  r'''A professional Geo-information scientist and developer good at Python. You have worked on 
+Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. Your very good at assembly functions and programs together, and yuor know how to make programs robust.
+'''
+
 assembly_requirement = ['You can think step by step. ',
                     f"Each function is one step to solve the question. ",
                     f"The output of the final function is the question to the question.",
@@ -123,7 +135,10 @@ assembly_requirement = ['You can think step by step. ',
                     ]
 
 #--------------- constants for direct request prompt generation  ---------------
-direct_request_role = graph_role
+direct_request_role = r'''A professional Geo-information scientist and developer good at Python. You have worked on 
+Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. 
+Yor program is always concise and robust, considering the various data circumstances. You are also super experienced on generating map.
+'''
 
 direct_request_task_prefix = r'Write a Python program'
 
@@ -141,25 +156,29 @@ direct_request_requirement = [
                         "Note module 'pandas' has no attribute 'StringIO'",
                         "Use the latest Python module methods.",
                         "When doing spatial analysis, convert the involved spatial layers into the same map projection.",
-                        "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
+                        # "DO NOT reproject or set spatial data(e.g., GeoPandas Dataframe) if only one layer involved.",
                         "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "If join DataFrame and GeoDataFrame, using common columns, DO NOT convert DataFrame to GeoDataFrame.",
-                        "When joining tables, convert the involved columns to string type without leading zeros. ",
+                        # "When joining tables, convert the involved columns to string type without leading zeros. ",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
-                        "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
+                        # "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
                         "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
                         # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
-                        "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
+                        # "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
-                        "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
+                        # "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
                         # "Drop rows with NaN cells, i.e., df.dropna(), before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
                         "The program is executable, put it in a function named 'direct_solution()' then run it, but DO NOT use 'if __name__ == '__main__:' statement because this program needs to be executed by exec().",
-
+                         "Before using Pandas or GeoPandas columns for further processing (e.g. join or calculation), drop recoreds with NaN cells in that column, i.e., df.dropna(columns=['XXX']).",
+                        "When read FIPS or GEOID columns from CSV files, read those columns as str, never as float.",
+                        "If joining FIPS or GEOID, need to fill the leading zeros (digits: state: 2, county: 5, tract: 11, block group: 12."
                         ]
 
 #--------------- constants for debugging prompt generation  ---------------
-debug_role = graph_role
+debug_role =  r'''A professional Geo-information scientist and developer good at Python. You have worked on Geographic 
+information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. You have significant experience on code debuging. You like to find out debugs and fix code. Moreover, you usually will consider issues from teh data side, not only code implementation.
+'''
 
 debug_task_prefix = r'You need to correct the code of a program, then return the complete corrected code. '
 
@@ -174,21 +193,24 @@ debug_requirement = [
                         "Map projection conversion is only conducted for spatial data layers such as GeoDataFrame. DataFrame loaded from a CSV file does not have map projection information.",
                         "If join DataFrame and GeoDataFrame, using common columns, DO NOT convert DataFrame to GeoDataFrame.",
                         "Remember the variable, column, and file names used in ancestor functions when using them, such as joining tables or calculating.",
-                        "When joining tables, convert the involved columns to string type without leading zeros. ",
+                        # "When joining tables, convert the involved columns to string type without leading zeros. ",
                         "When doing spatial joins, remove the duplicates in the results. Or please think about whether it needs to be removed.",
                         "If using colorbar for GeoPandas or Matplotlib visulization, set the colorbar's height or length as the same as the plot.",
                         "Graphs or maps need to show the unit.",
                         # "Show a progressbar (e.g., tqdm in Python) if loop more than 200 times, also add exception handling for loops to make sure the loop can run.",
-                        "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
+                        # "When crawl the webpage context to ChatGPT, using Beautifulsoup to crawl the text only, not all the HTML file.",
                         "If using GeoPandas for spatial joining, the arguements are: geopandas.sjoin(left_df, right_df, how='inner', predicate='intersects', lsuffix='left', rsuffix='right', **kwargs), how: default ‘inner’, use intersection of keys from both dfs; retain only left_df geometry column; ‘left’: use keys from left_df, retain only left_df geometry column. ",
-                        "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
-                        # "Drop rows with NaN cells, i.e., df.dropna(),  before using Pandas or GeoPandas columns for processing (e.g. join or calculation).",
+                        # "GEOID in US Census data and FIPS (or 'fips') in Census boundaries are integer with leading zeros. If use pandas.read_csv() to GEOID or FIPS (or 'fips') columns from read CSV files, set the dtype as 'str'.",
+                         "Before using Pandas or GeoPandas columns for further processing (e.g. join or calculation), drop recoreds with NaN cells in that column, i.e., df.dropna(columns=['XXX']).",
                         # "Drop rows with NaN cells, i.e., df.dropna(),  if the error information reports NaN related errors."
+                        "When read FIPS or GEOID columns from CSV files, read those columns as str, never as float.",
+                        "If joining FIPS or GEOID, need to fill the leading zeros (digits: state: 2, county: 5, tract: 11, block group: 12."
                         #
                         ]
 
 #--------------- constants for operation review prompt generation  ---------------
-operation_review_role = graph_role
+operation_review_role =  r'''A professional Geo-information scientist and developer good at Python. You have worked on Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. Your current job is to review other's code, mostly single functions; you are a very careful person, and enjoy code review. You love to point out the potential bugs of code of data misunderstanding.
+'''
 
 operation_review_task_prefix = r'Review the code of a function to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
 
@@ -202,11 +224,15 @@ operation_review_requirement = [
                         'Pay extra attention on the common field names when joining Pandas DataFrame.',
                         'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
                         'Revise the buggy parts, but DO NOT rewrite the entire function, MUST keep the function name, its arguments, and returns.',
-                 #
+                        "Before using Pandas or GeoPandas columns for further processing (e.g. join or calculation), drop recoreds with NaN cells in that column, i.e., df.dropna(columns=['XXX']).",
+                        "When read FIPS or GEOID columns from CSV files, read those columns as str, never as float.",
+                        "If joining FIPS or GEOID, need to fill the leading zeros (digits: state: 2, county: 5, tract: 11, block group: 12.",
+                                     #
                         ]
 
 #--------------- constants for assembly program review prompt generation  ---------------
-assembly_review_role = graph_role
+assembly_review_role =  r'''A professional Geo-information scientist and developer good at Python. You have worked on Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. Your current job is to review other's code -- mostly assembly functions into a complete programm; you are a very careful person, and enjoy code review. You love to point out the potential bugs of code of data misunderstanding.
+'''
 
 assembly_review_task_prefix = r'Review the code of a program to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
 
@@ -225,7 +251,9 @@ assembly_review_requirement = [
                         ]
 
 #--------------- constants for direct program review prompt generation  ---------------
-direct_review_role = graph_role
+direct_review_role = r'''A professional Geo-information scientist and developer good at Python. You have worked on Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. Yor program is always concise and robust, considering the various data circumstances. You are also super experienced on generating map. Your current job is to review other's code -- mostly assembly functions into a complete programm; you are a very careful person, and enjoy code review. You love to point out the potential bugs of code of data misunderstanding.
+'''
+
 
 direct_review_task_prefix = r'Review the code of a program to determine whether the code meets its associated requirements. If not, correct it then return the complete corrected code. '
 
@@ -238,12 +266,16 @@ direct_review_requirement = [
                         'Pay extra attention on file name, table field name, spatial analysis parameters, map projections, and NaN cells removal in the used Pandas columns.',
                         'Pay extra attention on the common field names when joining Pandas DataFrame.',
                         'The given code might has error in mapping or visualization when using GeoPandas or Matplotlib packages.',
-                        #
+                         "Before using Pandas or GeoPandas columns for further processing (e.g. join or calculation), drop recoreds with NaN cells in that column, i.e., df.dropna(columns=['XXX']).",
+                        "When read FIPS or GEOID columns from CSV files, read those columns as str, never as float.",
+                        "If joining FIPS or GEOID, need to fill the leading zeros (digits: state: 2, county: 5, tract: 11, block group: 12.",
                         ]
 
 
 #--------------- constants for sampling data prompt generation  ---------------
-sampling_data_role = graph_role
+sampling_data_role = r'''A professional Geo-information scientist and developer good at Python. You have worked on Geographic information science more than 20 years, and know every detail and pitfall when processing spatial data and coding. You are also super experienced on spatial data processing. Your current job to help other programmers to understand the data, such as map projection, attributes, and data types.
+'''
+
 
 sampling_task_prefix = r"Given a function, write a program to run this function, then sample the returned data of the function. The program needs to be run by another Python program via exec() function, and the sampled data will be stored in a variable."
 

@@ -95,3 +95,5 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 - Develop a web-based front-end user inteface
 - Test the integration of LLM-Geo with QGIS and ArcGIS.
 
+# Note:
+In our intensive testing in Oct. 2023, we found that GPT-4 return correct code in a lower success rate. Anyone using LLM-Geo may need to run it multiple time with the debugging function turned on. We will continue to improve LLM-Geo, and please send us a pull request if you have any improvement! Thank you!
