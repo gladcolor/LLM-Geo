@@ -1,4 +1,4 @@
-# Autonomous GIS (AutoGIS): the next-generation AI-powered GIS
+# Autonomous GIS: the next-generation AI-powered GIS
 
 GIS stands for Geographic Information System; one of its major functionality is to conduct spatial analysis, manually, in the current stage. Large Language Models (LLMs), such as ChatGPT, demonstrate a strong understanding of human natural language and have been explored and applied in various fields, including reasoning, creative writing, code generation, translation, and information retrieval. 
 
@@ -9,7 +9,7 @@ For two case studies, LLM-Geo successfully returned accurate results, including 
 ![img_1.png](images/img_1.png)
 Overall workflow of LLM-Geo
 
-Check out our preprint paper here: [Autonomous GIS: the next-generation AI-powered GIS](https://www.researchgate.net/publication/370635187_Autonomous_GIS_the_next-generation_AI-powered_GIS). Recommended citation format: Li Z., Ning H., 2023. Autonomous GIS: the next-generation AI-powered GIS. arXiv.2305.06453
+Check out the published paper here: [Autonomous GIS: the next-generation AI-powered GIS](https://www.tandfonline.com/doi/full/10.1080/17538947.2023.2278895). Recommended citation format: Li Z., Ning H., 2023. Autonomous GIS: the next-generation AI-powered GIS. Interntional Journal of Digital Earth. https://doi.org/10.1080/17538947.2023.2278895
 
 Note:  We are still developing LLM-Geo, and the ideas presented in the paper may change due to the rapid development of AI. For instance, the token limitation appears to have been overcome by [Claude](https://www.anthropic.com/index/100k-context-windows) (released on 2023-05-11). We hope LLM-Geo can inspire GIScience professionals to further investigate more on autonomous GIS.    
 
@@ -28,7 +28,7 @@ If you have difficulties to install `GeoPandas` in Windows, refer to this [post]
 - Note that solution based on graph, code review, and debug will cost a lot of tokens. We provide a Jupyter notebook [(Direct_request_LLM.ipynb)](https://github.com/gladcolor/LLM-Geo/blob/master/Direct_request_LLM.ipynb) to directly request solutions from LLM. This is a much more quick way to get solutions for simple tasks/questions, but its robustness may slightly lower.
 
 # Case studies
-These case studies are carefully designed to show the concepts of autonomous GIS. Please use GPT-4; the lower version of GPT will fail to generate correct code and results. Note everytime GPT-4 generate different outputs, so your results may look different. Per our test, the generated program may not success everytime, but there is 80% chance to run successfully. If input the generated prompts to the ChatGPT-4 chat box rather than API, the success rate will be much higher. We will improve the overall workflow of LLM-Geo, currently we do not push the entire historical conversation (i.e., sufficient information) to the GPT-4 API.
+These case studies are designed to show the concepts of autonomous GIS. Please use GPT-4; the lower version of GPT will fail to generate correct code and results. Note every time GPT-4 generate different outputs, so your results may look different. Per our test, the generated program may not success every time, but there is about 80% chance to run successfully. If input the generated prompts to the ChatGPT-4 chat box rather than API, the success rate will be much higher. We will improve the overall workflow of LLM-Geo, currently we do not push the entire historical conversation (i.e., sufficient information) to the GPT-4 API.
 
 Video demonstrations for the case studies
 
