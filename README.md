@@ -96,6 +96,6 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 - Test the integration of LLM-Geo with QGIS and ArcGIS.
 
 # Note:
-- In our intensive testing in Oct. 2023, we found that GPT-4 return correct code in a lower success rate. Anyone using LLM-Geo may need to run it multiple time with the debugging function turned on. We will continue to improve LLM-Geo, and please send us a pull request if you have any improvement! Thank you!
+- In our intensive testing in Oct. 2023, we found that GPT-4 returned correct code in a lower success rate. Anyone using LLM-Geo may need to run it multiple times with the debugging function turned on. We will continue to improve LLM-Geo, and please send us a pull request if you have any improvement! Thank you!
 
-- You may need `geopands` package to load vector files. Please install it in advance.
+- You may need the [geopandas](https://geopandas.org/en/stable/getting_started.html#installation) package to load vector files. Please install it in advance.
