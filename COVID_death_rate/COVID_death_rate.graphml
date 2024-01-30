@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d2" for="node" attr.name="description" attr.type="string" />
+  <key id="d1" for="node" attr.name="data_path" attr.type="string" />
+  <key id="d0" for="node" attr.name="node_type" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="COVID_19_csv_url">
+      <data key="d0">data</data>
+      <data key="d1">https://github.com/nytimes/covid-19-data/raw/master/us-counties-2020.csv</data>
+      <data key="d2">URL to the COVID-19 CSV data</data>
+    </node>
+    <node id="load_COVID_19_csv">
+      <data key="d0">operation</data>
+      <data key="d2">Load the COVID-19 CSV data</data>
+    </node>
+    <node id="COVID_19_df">
+      <data key="d0">data</data>
+      <data key="d2">COVID-19 DataFrame loaded from the CSV file</data>
+    </node>
+    <node id="county_boundary_shp_url">
+      <data key="d0">data</data>
+      <data key="d1">https://github.com/gladcolor/spatial_data/raw/master/contiguous_counties.zip</data>
+      <data key="d2">URL to the County Boundary shapefile</data>
+    </node>
+    <node id="load_county_boundary_shp">
+      <data key="d0">operation</data>
+      <data key="d2">Load the County Boundary shapefile</data>
+    </node>
+    <node id="county_boundary_gdf">
+      <data key="d0">data</data>
+      <data key="d2">County Boundary GeoDataFrame loaded from the shapefile</data>
+    </node>
+    <node id="demography_csv_url">
+      <data key="d0">data</data>
+      <data key="d1">https://raw.githubusercontent.com/gladcolor/spatial_data/master/Demography/ACS2020_5year_county.csv</data>
+      <data key="d2">URL to the Demography CSV data</data>
+    </node>
+    <node id="load_demography_csv">
+      <data key="d0">operation</data>
+      <data key="d2">Load the Demography CSV data</data>
+    </node>
+    <node id="demography_df">
+      <data key="d0">data</data>
+      <data key="d2">Demography DataFrame loaded from the CSV file</data>
+    </node>
+    <node id="compute_death_rate_sr_rate">
+      <data key="d0">operation</data>
+      <data key="d2">Compute the death rate and senior resident rate</data>
+    </node>
+    <node id="death_rate_sr_rate_df">
+      <data key="d0">data</data>
+      <data key="d2">DataFrame holding the computed death rate and senior resident rate</data>
+    </node>
+    <node id="join_df_gdf">
+      <data key="d0">operation</data>
+      <data key="d2">Join the computed DataFrame with the GeoDataFrame</data>
+    </node>
+    <node id="joined_df">
+      <data key="d0">data</data>
+      <data key="d2">Joined DataFrame and GeoDataFrame</data>
+    </node>
+    <node id="draw_choropleth_map">
+      <data key="d0">operation</data>
+      <data key="d2">Draw choropleth map</data>
+    </node>
+    <node id="choropleth_map">
+      <data key="d0">data</data>
+      <data key="d2">Choropleth map drawn</data>
+    </node>
+    <node id="draw_scatter_plot">
+      <data key="d0">operation</data>
+      <data key="d2">Draw scatter plot</data>
+    </node>
+    <node id="scatter_plot">
+      <data key="d0">data</data>
+      <data key="d2">Scatter plot drawn</data>
+    </node>
+    <edge source="COVID_19_csv_url" target="load_COVID_19_csv" />
+    <edge source="load_COVID_19_csv" target="COVID_19_df" />
+    <edge source="COVID_19_df" target="compute_death_rate_sr_rate" />
+    <edge source="county_boundary_shp_url" target="load_county_boundary_shp" />
+    <edge source="load_county_boundary_shp" target="county_boundary_gdf" />
+    <edge source="county_boundary_gdf" target="join_df_gdf" />
+    <edge source="demography_csv_url" target="load_demography_csv" />
+    <edge source="load_demography_csv" target="demography_df" />
+    <edge source="demography_df" target="compute_death_rate_sr_rate" />
+    <edge source="compute_death_rate_sr_rate" target="death_rate_sr_rate_df" />
+    <edge source="death_rate_sr_rate_df" target="join_df_gdf" />
+    <edge source="death_rate_sr_rate_df" target="draw_scatter_plot" />
+    <edge source="join_df_gdf" target="joined_df" />
+    <edge source="joined_df" target="draw_choropleth_map" />
+    <edge source="draw_choropleth_map" target="choropleth_map" />
+    <edge source="draw_scatter_plot" target="scatter_plot" />
+  </graph>
+</graphml>

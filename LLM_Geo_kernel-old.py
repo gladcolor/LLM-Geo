@@ -6,20 +6,12 @@ import networkx as nx
 import pandas as pd
 import geopandas as gpd
 # from pyvis.network import Network
-from openai import OpenAI
-import configparser
+import openai
 import pickle
 import time
 import sys
 import traceback
 
-#load config
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-# use your KEY.
-OpenAI_key = config.get('API_Key', 'OpenAI_key')
-client = OpenAI(api_key=OpenAI_key)
 
 class Solution():
     """
@@ -93,6 +85,7 @@ class Solution():
             model=None,
             ):
 
+        openai.api_key = constants.OpenAI_key
 
         if system_role is None:
             system_role = self.role
@@ -109,14 +102,16 @@ class Solution():
         while (not isSucceed) and (count < retry_cnt):
             try:
                 count += 1
-                response = client.chat.completions.create(model=model,
-                # messages=self.chat_history,  # Too many tokens to run.
-                messages=[
-                            {"role": "system", "content": constants.operation_role},
-                            {"role": "user", "content": prompt},
-                          ],
-                temperature=temperature,
-                stream=stream)
+                response = openai.ChatCompletion.create(
+                    model=model,
+                    # messages=self.chat_history,  # Too many tokens to run.
+                    messages=[
+                                {"role": "system", "content": constants.operation_role},
+                                {"role": "user", "content": prompt},
+                              ],
+                    temperature=temperature,
+                    stream=stream,
+                )
             except Exception as e:
                 # logging.error(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
                 print(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n",
@@ -127,12 +122,12 @@ class Solution():
         if stream:
             for chunk in response:
                 response_chucks.append(chunk)
-                content = chunk.choices[0].delta.content
+                content = chunk["choices"][0].get("delta", {}).get("content")
                 if content is not None:
                     if verbose:
                         print(content, end='')
         else:
-            content = response.choices[0].message.content
+            content = response["choices"][0]['message']["content"]
             # print(content)
         print('\n\n')
         # print("Got LLM reply.")
@@ -328,10 +323,10 @@ class Solution():
                           model=self.model,
                           # model=r"gpt-4",
                          )
-            print(response)
-            #operation.response = response
+            # print(response)
+            operation['response'] = response
             try:
-                operation_code = helper.extract_code(response=operation.response, verbose=False)
+                operation_code = helper.extract_code(response=operation['response'], verbose=False)
             except Exception as e:
                 operation_code = ""
             operation['operation_code'] = operation_code
