@@ -56,6 +56,7 @@ The results are: (a) Solution graph, (b) assembly program (Python codes), and (c
 
 ## Case 2: Human mobility data retrieval and trend visualization.
 NOTE: Please ignore this case since the involved API has been shutdown.
+
 This task is to investigate the mobility changes during COVID-19 pandemic in France 2020. First, we asked LLM-Geo to retrieve mobility data from the ODT Explorer using [REST API](https://github.com/GIBDUSC/ODT_Flow), and then compute and visualize the monthly change rate compared to January 2020. We input the task (question) to LLM-Geo as:
 ```
 Task: 
