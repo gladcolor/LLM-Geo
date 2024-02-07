@@ -3,7 +3,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 # use your KEY.
-OpenAI_key = config.get('AZURE_OPENAI', 'Azure_OpenAI_key')
+OpenAI_key = config.get('API_Key', 'OpenAI_key')
 # print("OpenAI_key:", OpenAI_key)
 
 

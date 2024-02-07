@@ -1,7 +1,8 @@
 import re
 # import openai
 from collections import deque
-from openai import AzureOpenAI
+from openai import OpenAI
+
 import configparser
 
 # import networkx as nx
@@ -22,10 +23,10 @@ import LLM_Geo_Constants as constants
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# use your KEY and END_POINT
-AOAI_key = config.get('AZURE_OPENAI', 'Azure_OpenAI_key')
-AOAI_endpoint = config.get('AZURE_OPENAI', 'Azure_OpenAI_endpoint')
-client = AzureOpenAI(azure_endpoint=AOAI_endpoint,api_key=AOAI_key,api_version="2023-05-15")
+# use your KEY.
+OpenAI_key = config.get('API_Key', 'OpenAI_key')
+client = OpenAI(api_key=OpenAI_key)
+
 
 def extract_content_from_LLM_reply(response):
     stream = False
@@ -307,7 +308,7 @@ def show_graph(G):
     # Set node colors based on node type
     node_colors = []
     for node in nt.nodes:
-        print('node:', node)
+        # print('node:', node)
         if node['node_type'] == 'data':
             #print('node:', node)
             if node['label'] in sinks:

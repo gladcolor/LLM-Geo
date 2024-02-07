@@ -6,7 +6,7 @@ import networkx as nx
 import pandas as pd
 import geopandas as gpd
 # from pyvis.network import Network
-from openai import AzureOpenAI
+from openai import OpenAI
 import configparser
 import pickle
 import time
@@ -17,10 +17,11 @@ import traceback
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# use your KEY and END_POINT
-AOAI_key = config.get('AZURE_OPENAI', 'Azure_OpenAI_key')
-AOAI_endpoint = config.get('AZURE_OPENAI', 'Azure_OpenAI_endpoint')
-client = AzureOpenAI(azure_endpoint=AOAI_endpoint,api_key=AOAI_key,api_version="2023-05-15")
+# use your KEY.
+OpenAI_key = config.get('API_Key', 'OpenAI_key')
+client = OpenAI(api_key=OpenAI_key)
+
+  
 
 class Solution():
     """
@@ -329,10 +330,11 @@ class Solution():
                           model=self.model,
                           # model=r"gpt-4",
                          )
-            print(response)
-            operation.response = response
+            # print(response)
+            operation['response'] = response
             try:
-                operation_code = helper.extract_code(response=operation.response, verbose=False)
+                operation_code = helper.extract_code(response=operation['response'], verbose=False)
+                # print("operation_code:", operation_code)
             except Exception as e:
                 operation_code = ""
             operation['operation_code'] = operation_code
