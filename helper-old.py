@@ -1,9 +1,7 @@
 import re
 # import openai
 from collections import deque
-from openai import AzureOpenAI
-import configparser
-
+import openai
 # import networkx as nx
 import logging
 import time
@@ -18,15 +16,6 @@ from pyvis.network import Network
 
 import LLM_Geo_Constants as constants
 
-#load config
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-# use your KEY and END_POINT
-AOAI_key = config.get('AZURE_OPENAI', 'Azure_OpenAI_key')
-AOAI_endpoint = config.get('AZURE_OPENAI', 'Azure_OpenAI_endpoint')
-client = AzureOpenAI(azure_endpoint=AOAI_endpoint,api_key=AOAI_key,api_version="2023-05-15")
-
 def extract_content_from_LLM_reply(response):
     stream = False
     if isinstance(response, list):
@@ -35,7 +24,7 @@ def extract_content_from_LLM_reply(response):
     content = ""
     if stream:       
         for chunk in response:
-            chunk_content = chunk.choices[0].delta.content         
+            chunk_content = chunk["choices"][0].get("delta", {}).get("content")         
 
             if chunk_content is not None:
                 # print(chunk_content, end='')
@@ -43,7 +32,7 @@ def extract_content_from_LLM_reply(response):
                 # print(content)
         # print()
     else:
-        content = response.choices[0].message.content
+        content = response["choices"][0]['message']["content"]
         # print(content)
         
     return content
@@ -86,6 +75,7 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
                   retry_cnt=3,
                   sleep_sec=10,
                   ):
+    openai.api_key = constants.OpenAI_key
 
     # Generate prompt for ChatGPT
     # url = "https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv"
@@ -99,13 +89,15 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
     while (not isSucceed) and (count < retry_cnt):
         try:
             count += 1
-            response = client.chat.completions.create(model=model,
-            messages=[
-            {"role": "system", "content": system_role},
-            {"role": "user", "content": prompt},
-            ],
-            temperature=temperature,
-            stream=stream)
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=[
+                {"role": "system", "content": system_role},
+                {"role": "user", "content": prompt},
+                ],
+                temperature=temperature,
+                stream=stream,
+                )
         except Exception as e:
             # logging.error(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
             print(f"Error in get_LLM_reply(), will sleep {sleep_sec} seconds, then retry {count}/{retry_cnt}: \n", e)
@@ -116,12 +108,12 @@ def get_LLM_reply(prompt="Provide Python code to read a CSV file from this URL a
     if stream:
         for chunk in response:
             response_chucks.append(chunk)
-            content = chunk.choices[0].delta.content
+            content = chunk["choices"][0].get("delta", {}).get("content")
             if content is not None:
                 if verbose:
                     print(content, end='')
     else:
-        content = response.choices[0].message.content
+        content = response["choices"][0]['message']["content"]
         # print(content)
     print('\n\n')
     # print("Got LLM reply.")
@@ -307,15 +299,15 @@ def show_graph(G):
     # Set node colors based on node type
     node_colors = []
     for node in nt.nodes:
-        print('node:', node)
+        
         if node['node_type'] == 'data':
-            #print('node:', node)
+            # print('node:', node)
             if node['label'] in sinks:
                 node_colors.append('violet')  # lightgreen
-                #print(node)
+                # print(node)
             elif node['label'] in sources:
                 node_colors.append('lightgreen')  # 
-                #print(node)
+                # print(node)
             else:
                 node_colors.append('orange')
             
