@@ -114,7 +114,7 @@ class Solution():
                 response = client.chat.completions.create(model=model,
                 # messages=self.chat_history,  # Too many tokens to run.
                 messages=[
-                            {"role": "system", "content": constants.operation_role},
+                            {"role": "system", "content": system_role},
                             {"role": "user", "content": prompt},
                           ],
                 temperature=temperature,
