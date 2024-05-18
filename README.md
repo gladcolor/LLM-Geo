@@ -96,7 +96,7 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 - Implement an autonomous data collection module.
 - Develop a web-based front-end user interface.
 - Test the integration of LLM-Geo with QGIS.
-- Integrate and evaluate the open source large model Meta Llama 3 as an alternative reasoning core in LLM-Geo.
+- Integrate and evaluate the open source LLM Meta Llama 3 (8B and 70B) as an alternative reasoning core in LLM-Geo.
 
 # Note:
 - In our intensive testing in Oct. 2023, we found that GPT-4 returned the correct code with a lower success rate. Anyone using LLM-Geo may need to run it multiple times with the debugging function turned on. We will continue to improve LLM-Geo, and please send us a pull request if you have any improvement! Thank you!
