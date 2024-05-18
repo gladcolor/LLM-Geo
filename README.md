@@ -2,9 +2,9 @@
 
 GIS stands for Geographic Information System; one of its major functionality is to conduct spatial analysis, manually, in the current stage. Large Language Models (LLMs), such as ChatGPT, demonstrate a strong understanding of human natural language and have been explored and applied in various fields, including reasoning, creative writing, code generation, translation, and information retrieval. 
 
-By adopting LLM as the reasoning core, we introduce Autonomous GIS, an AI-powered geographic information system (GIS) that leverages the LLM’s general abilities in natural language understanding, reasoning, and coding for addressing spatial problems with automatic spatial data collection, analysis and visualization. We envision that autonomous GIS will need to achieve five autonomous goals including **self-generating, self-organizing, self-verifying, self-executing, and self-growing**. We developed a prototype system called LLM-Geo using GPT-4 API in a Python environment, demonstrating what an autonomous GIS looks like and how it delivers expected results without human intervention using two case studies. 
+By adopting LLM as the reasoning core, we introduce Autonomous GIS, an AI-powered geographic information system (GIS) that leverages the LLM’s general abilities in natural language understanding, reasoning, and coding for addressing spatial problems with automatic spatial data collection, analysis and visualization. We envision that autonomous GIS will need to achieve five autonomous goals including **self-generating, self-organizing, self-verifying, self-executing, and self-growing**. We developed a prototype system called LLM-Geo using GPT-4 API in a Python environment, demonstrating what an autonomous GIS looks like and how it delivers expected results without human intervention using three case studies. 
 
-For two case studies, LLM-Geo successfully returned accurate results, including aggregated numbers, graphs, and maps, significantly reducing manual operation time. Although still lacking several important modules such as logging and code testing, LLM-Geo demonstrates a potential path towards next-generation AI-powered GIS. We advocate for the GIScience community to dedicate more effort to the research and development of autonomous GIS, making spatial analysis easier, faster, and more accessible to a broader audience. 
+For the case studies, LLM-Geo successfully returned accurate results, including aggregated numbers, graphs, and maps, significantly reducing manual operation time. Although still lacking several important modules such as logging and code testing, LLM-Geo demonstrates a potential path towards next-generation AI-powered GIS. We advocate for the GIScience community to dedicate more effort to the research and development of autonomous GIS, making spatial analysis easier, faster, and more accessible to a broader audience. 
 
 ![img_1.png](images/img_1.png)
 Overall workflow of LLM-Geo
@@ -90,12 +90,13 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 ![img_6.png](images/img_6.png)
 
 # To Do
-- Add more case studies.
+- Test with more case studies.
 - Improve the prompt generation.
-- Implement autonomous data understanding module.
+- Implement an autonomous data understanding module.
 - Implement an autonomous data collection module.
 - Develop a web-based front-end user interface.
-- Test the integration of LLM-Geo with QGIS and ArcGIS.
+- Test the integration of LLM-Geo with QGIS.
+- Integrate and evaluate the open source large model Meta Llama 3 as an alternative reasoning core in LLM-Geo.
 
 # Note:
 - In our intensive testing in Oct. 2023, we found that GPT-4 returned the correct code with a lower success rate. Anyone using LLM-Geo may need to run it multiple times with the debugging function turned on. We will continue to improve LLM-Geo, and please send us a pull request if you have any improvement! Thank you!
