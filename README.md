@@ -89,15 +89,18 @@ Data locations:
 The results are: (a) Solution graph, (b) county level death rate map of the contiguous US, (c) scatter plot showing the association between COVID-19 death rate and the senior resident rate at the county level, (d) assembly program.  
 ![img_6.png](images/img_6.png)
 
+# Program architecture
+Understand the architecture of LLM-Geo might help you customize it or develop you own autonomous GIS agents; [here](Architecture_LLM_Geo.pdf) is a brief introduction of the architecture.
+
 # To Do
 - Add more case studies.
 - Improve the prompt generation.
 - Implement autonomous data understanding module.
-- Implement an autonomous data collection module.
+- Implement an autonomous data collection module. (Working on another data download agent)
+- Implement an autonomous data visualization module. (Working on another cartograph agent)
 - Develop a web-based front-end user interface.
 - Test the integration of LLM-Geo with QGIS and ArcGIS.
 
 # Note:
-- In our intensive testing in Oct. 2023, we found that GPT-4 returned the correct code with a lower success rate. Anyone using LLM-Geo may need to run it multiple times with the debugging function turned on. We will continue to improve LLM-Geo, and please send us a pull request if you have any improvement! Thank you!
 
 - You may need the [geopandas](https://geopandas.org/en/stable/getting_started.html#installation) package to load vector files. Please install it in advance.
