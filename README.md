@@ -109,4 +109,4 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 # Note:
 
 - You may need the [geopandas](https://geopandas.org/en/stable/getting_started.html#installation) package to load vector files. Please install it in advance.
-- We created another autonomous agent to download geospatial data, LLM-Find. There are two implementations: [Jupyter Notebook](https://github.com/gladcolor/LLM-Find/) and the [QGIS plugin](https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent). This agent is very helpful, please play with it!
+- We created another autonomous agent to download geospatial data, LLM-Find. There are two implementations: [Jupyter Notebook](https://github.com/gladcolor/LLM-Find/) and the [QGIS plugin](https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent). Please try them out!
