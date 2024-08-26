@@ -92,14 +92,18 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 # Program architecture
 Understand the architecture of LLM-Geo might help you customize it or develop you own autonomous GIS agents; [here](Architecture_LLM_Geo.pdf) is a brief introduction of the architecture.
 
+# Relavant Projects
+- An autonomous GIS agent framework for geospatial data retrieval https://github.com/gladcolor/LLM-Find
+https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
+- Test the integration of LLM-Geo with QGIS. https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
+
+
 # To Do
 - Test with more case studies.
 - Improve the prompt generation.
 - Implement an autonomous data understanding module.
-- Implement an autonomous data collection module. (Working on another data download agent) https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent/tree/master
 - Implement an autonomous data visualization module. (Working on another cartograph agent)
 - Develop a web-based front-end user interface.
-- Test the integration of LLM-Geo with QGIS.
 - Integrate and evaluate the open source LLM Meta Llama 3 (8B and 70B) as an alternative reasoning core in LLM-Geo.
 
 # Note:
