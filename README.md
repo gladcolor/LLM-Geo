@@ -96,7 +96,7 @@ Understand the architecture of LLM-Geo might help you customize it or develop yo
 - Test with more case studies.
 - Improve the prompt generation.
 - Implement an autonomous data understanding module.
-- Implement an autonomous data collection module. (Working on another data download agent)
+- Implement an autonomous data collection module. (Working on another data download agent) https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent/tree/master
 - Implement an autonomous data visualization module. (Working on another cartograph agent)
 - Develop a web-based front-end user interface.
 - Test the integration of LLM-Geo with QGIS.
