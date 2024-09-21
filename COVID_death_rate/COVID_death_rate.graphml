@@ -7,129 +7,118 @@
     <node id="covid_data_url">
       <data key="d0">data</data>
       <data key="d1">https://github.com/nytimes/covid-19-data/raw/master/us-counties-2020.csv</data>
-      <data key="d2">COVID-19 cases and deaths in 2020</data>
+      <data key="d2">URL for COVID-19 case data 2020</data>
     </node>
     <node id="load_covid_data">
       <data key="d0">operation</data>
-      <data key="d2">Load COVID-19 data from CSV</data>
+      <data key="d2">Load COVID-19 case data for 2020</data>
     </node>
-    <node id="covid_df">
+    <node id="covid_case_data">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">DataFrame for COVID-19 cases and deaths</data>
+      <data key="d2">Loaded COVID-19 case data for 2020</data>
     </node>
     <node id="county_shapefile_url">
       <data key="d0">data</data>
       <data key="d1">https://github.com/gladcolor/spatial_data/raw/master/contiguous_counties.zip</data>
-      <data key="d2">Contiguous US county boundaries</data>
+      <data key="d2">URL for contiguous US county boundaries shapefile</data>
     </node>
     <node id="load_county_shapefile">
       <data key="d0">operation</data>
-      <data key="d2">Load US county boundaries from shapefile</data>
+      <data key="d2">Load county boundary shapefile</data>
     </node>
-    <node id="county_gdf">
+    <node id="county_boundaries_gdf">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">GeoDataFrame containing US county boundaries</data>
+      <data key="d2">GeoDataFrame of county boundaries</data>
     </node>
     <node id="census_data_url">
       <data key="d0">data</data>
       <data key="d1">https://raw.githubusercontent.com/gladcolor/spatial_data/master/Demography/ACS2020_5year_county.csv</data>
-      <data key="d2">ACS2020 Census data for US counties</data>
+      <data key="d2">URL for Census ACS2020 data</data>
     </node>
     <node id="load_census_data">
       <data key="d0">operation</data>
-      <data key="d2">Load ACS2020 Census data from CSV</data>
+      <data key="d2">Load Census ACS2020 data</data>
     </node>
-    <node id="census_df">
+    <node id="census_data">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">DataFrame for ACS2020 Census data</data>
+      <data key="d2">Loaded Census ACS2020 data</data>
     </node>
-    <node id="calculate_death_rate">
+    <node id="compute_death_rate">
       <data key="d0">operation</data>
-      <data key="d2">Calculate death rate (deaths/cases) for each county</data>
+      <data key="d2">Compute death rate per county from COVID data</data>
     </node>
-    <node id="death_rate_df">
+    <node id="death_rate_data">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">DataFrame with calculated COVID-19 death rates</data>
+      <data key="d2">Data containing death rates per county</data>
     </node>
-    <node id="merge_death_rate">
+    <node id="join_death_rate_boundaries">
       <data key="d0">operation</data>
-      <data key="d2">Join death rate data with county boundaries</data>
+      <data key="d2">Join COVID death rate data with county boundaries</data>
     </node>
-    <node id="county_deathrate_gdf">
+    <node id="death_rate_map_data">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">GeoDataFrame with county boundaries and death rates</data>
+      <data key="d2">GeoDataFrame of counties annotated with death rates</data>
     </node>
-    <node id="reproject_to_albers">
+    <node id="draw_choropleth_map">
       <data key="d0">operation</data>
-      <data key="d2">Reproject GeoDataFrame to 'Conus Albers'</data>
-    </node>
-    <node id="albers_gdf">
-      <data key="d0">data</data>
-      <data key="d1" />
-      <data key="d2">Reprojected GeoDataFrame in 'Conus Albers'</data>
-    </node>
-    <node id="plot_choropleth_map">
-      <data key="d0">operation</data>
-      <data key="d2">Plot choropleth map for death rate using scheme='quantiles'</data>
+      <data key="d2">Draw choropleth map to show death rate using 'quantiles' scheme and 'Conus Albers' projection</data>
     </node>
     <node id="choropleth_map">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">Choropleth map of COVID-19 death rates</data>
+      <data key="d2">Choropleth map visualizing the death rate of COVID-19 among US counties</data>
     </node>
     <node id="calculate_senior_rate">
       <data key="d0">operation</data>
-      <data key="d2">Calculate senior resident rate from Census data</data>
+      <data key="d2">Calculate senior (65 and over) resident rate per county from census data</data>
     </node>
-    <node id="senior_rate_df">
+    <node id="senior_rate_data">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">DataFrame with calculated senior resident rates</data>
+      <data key="d2">Data containing senior resident rate per county</data>
     </node>
-    <node id="merge_senior_rate">
+    <node id="merge_death_senior_rate">
       <data key="d0">operation</data>
-      <data key="d2">Merge senior resident rate with death rate data</data>
+      <data key="d2">Merge death rate data with senior resident rate data</data>
     </node>
-    <node id="merged_df">
+    <node id="merged_data">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">DataFrame with death rates and senior resident rates</data>
+      <data key="d2">Merged data containing death rates and senior resident rates</data>
     </node>
-    <node id="plot_scatter_and_regression">
+    <node id="draw_scatter_plot">
       <data key="d0">operation</data>
-      <data key="d2">Plot scatter and regression for senior rate vs. death rate</data>
+      <data key="d2">Draw scatter plot for correlation of death rate with senior rate, including r-square and p-value</data>
     </node>
-    <node id="scatter_plot_with_regression">
+    <node id="scatter_plot">
       <data key="d0">data</data>
       <data key="d1" />
-      <data key="d2">Scatter plot of senior rate vs. death rate with regression line</data>
+      <data key="d2">Scatter plot showing correlation and trend line of death rate with senior resident rate</data>
     </node>
     <edge source="covid_data_url" target="load_covid_data" />
-    <edge source="load_covid_data" target="covid_df" />
-    <edge source="covid_df" target="calculate_death_rate" />
+    <edge source="load_covid_data" target="covid_case_data" />
+    <edge source="covid_case_data" target="compute_death_rate" />
     <edge source="county_shapefile_url" target="load_county_shapefile" />
-    <edge source="load_county_shapefile" target="county_gdf" />
-    <edge source="county_gdf" target="merge_death_rate" />
+    <edge source="load_county_shapefile" target="county_boundaries_gdf" />
+    <edge source="county_boundaries_gdf" target="join_death_rate_boundaries" />
     <edge source="census_data_url" target="load_census_data" />
-    <edge source="load_census_data" target="census_df" />
-    <edge source="census_df" target="calculate_senior_rate" />
-    <edge source="calculate_death_rate" target="death_rate_df" />
-    <edge source="death_rate_df" target="merge_death_rate" />
-    <edge source="death_rate_df" target="merge_senior_rate" />
-    <edge source="merge_death_rate" target="county_deathrate_gdf" />
-    <edge source="county_deathrate_gdf" target="reproject_to_albers" />
-    <edge source="reproject_to_albers" target="albers_gdf" />
-    <edge source="albers_gdf" target="plot_choropleth_map" />
-    <edge source="plot_choropleth_map" target="choropleth_map" />
-    <edge source="calculate_senior_rate" target="senior_rate_df" />
-    <edge source="senior_rate_df" target="merge_senior_rate" />
-    <edge source="merge_senior_rate" target="merged_df" />
-    <edge source="merged_df" target="plot_scatter_and_regression" />
-    <edge source="plot_scatter_and_regression" target="scatter_plot_with_regression" />
+    <edge source="load_census_data" target="census_data" />
+    <edge source="census_data" target="calculate_senior_rate" />
+    <edge source="compute_death_rate" target="death_rate_data" />
+    <edge source="death_rate_data" target="join_death_rate_boundaries" />
+    <edge source="death_rate_data" target="merge_death_senior_rate" />
+    <edge source="join_death_rate_boundaries" target="death_rate_map_data" />
+    <edge source="death_rate_map_data" target="draw_choropleth_map" />
+    <edge source="draw_choropleth_map" target="choropleth_map" />
+    <edge source="calculate_senior_rate" target="senior_rate_data" />
+    <edge source="senior_rate_data" target="merge_death_senior_rate" />
+    <edge source="merge_death_senior_rate" target="merged_data" />
+    <edge source="merged_data" target="draw_scatter_plot" />
+    <edge source="draw_scatter_plot" target="scatter_plot" />
   </graph>
 </graphml>
