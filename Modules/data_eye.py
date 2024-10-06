@@ -92,15 +92,19 @@ def see_table(file_path):
     if file_path[-4:].lower() == '.csv':
         # print(file_path)
         df = pd.read_csv(file_path)
+        sample_df = pd.read_csv(file_path, dtype=str)
     # get_df_types_str
-    types_str = _get_df_types_str(df)
+    types_str = '| '.join([f"{col}: {dtype}, {sample_df.iloc[0][col]} " for col, dtype in df.dtypes.items()])
+    types_str = f"column names, data types, and sample values (column_name: data_type, sample value |):[{types_str}]"
     meta_str = types_str
 
     return meta_str
 
 def _get_df_types_str(df):
-    types_str = ', '.join([f"{col}: {dtype}" for col, dtype in df.dtypes.items()])
-    types_str = f"[{types_str}]"
+    samples = df.sample(1)
+    # print("samples:", samples)
+    types_str = '| '.join([f"{col}: {dtype}, {samples.iloc[0][col]}" for col, dtype in df.dtypes.items()])
+    types_str = f"column names, data types, and sample values (column_name: data_type, sample value |):[{types_str}]"
     return types_str
 
 def see_vector(file_path):
