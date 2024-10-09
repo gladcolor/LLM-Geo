@@ -28,7 +28,7 @@ import sys
 # import data_eye_constants as constants
 import data_eye_constants as eye_constants
 
-import helper
+# import helper
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -49,19 +49,19 @@ def get_data_overview(data_location_dict):
 
             # print("data_path:", data_path)
 
-            if format_ in ["ESRI shapefile", "GeoPackage"]:
+            if format_ in eye_constants.vector_formats:
                 meta_str = see_vector(data_path)
 
-            if format_ in ["CSV"]:
+            if format_ in eye_constants.table_formats:
                 meta_str = see_table(data_path)
 
-            if format_ in ["Tiff", "JPEG", "PNG", "ERDAS IMG"]:
+            if format_ in eye_constants.raster_formats:
                 meta_str = see_raster(data_path)
 
             data['meta_str'] = meta_str
 
         except Exception as e:
-            pass
+            print("Error in get_data_overview()", data, e)
     return data_location_dict
 
 def add_data_overview_to_data_location(task, data_location_list, model = r'gpt-4o-2024-08-06'):
