@@ -3,12 +3,17 @@ import os
 import time
 import pandas as pd
 import geopandas as gpd
+import rasterio
+import rasterio.features
+import rasterio.warp
 
 from pydantic import BaseModel
 from openai import OpenAI
 
 import configparser
 import json
+from collections import OrderedDict
+
 
 module_path = os.path.abspath(os.path.join('..', 'helper'))
 if module_path not in sys.path:
@@ -39,18 +44,22 @@ def get_data_overview(data_location_dict):
     for data in data_locations:
         try:
             meta_str = ''
-            format = data['format']
+            format_ = data['format']
             data_path = data['location']
 
             # print("data_path:", data_path)
 
-            if (format == 'ESRI shapefile') or (format == 'GeoPackage'):
+            if format_ in ["ESRI shapefile", "GeoPackage"]:
                 meta_str = see_vector(data_path)
 
-            if (format == 'CSV'):
+            if format_ in ["CSV"]:
                 meta_str = see_table(data_path)
+                
+            if format_ in ["Tiff", "JPEG", "PNG", "ERDAS IMG"]:
+                meta_str = see_raster(data_path)    
 
             data['meta_str'] = meta_str
+            
         except Exception as e:
             pass
     return data_location_dict
@@ -83,15 +92,19 @@ def see_table(file_path):
     if file_path[-4:].lower() == '.csv':
         # print(file_path)
         df = pd.read_csv(file_path)
+        sample_df = pd.read_csv(file_path, dtype=str)
     # get_df_types_str
-    types_str = _get_df_types_str(df)
+    types_str = '| '.join([f"{col}: {dtype}, {sample_df.iloc[0][col]} " for col, dtype in df.dtypes.items()])
+    types_str = f"column names, data types, and sample values (column_name: data_type, sample value |):[{types_str}]"
     meta_str = types_str
 
     return meta_str
 
 def _get_df_types_str(df):
-    types_str = ', '.join([f"{col}: {dtype}" for col, dtype in df.dtypes.items()])
-    types_str = f"[{types_str}]"
+    samples = df.sample(1)
+    # print("samples:", samples)
+    types_str = '| '.join([f"{col}: {dtype}, {samples.iloc[0][col]}" for col, dtype in df.dtypes.items()])
+    types_str = f"column names, data types, and sample values (column_name: data_type, sample value |):[{types_str}]"
     return types_str
 
 def see_vector(file_path):
@@ -104,10 +117,40 @@ def see_vector(file_path):
 
     return meta_str
 
-def see_raster(file_path):
+def see_raster(file_path, statistics=False, approx=False):
+    with rasterio.open(file_path) as dataset:
+        raster_str = _get_raster_str(dataset, statistics=statistics, approx=approx)
 
-    return
+    return raster_str
 
+def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasterio object
+    raster_dict = dataset.meta
+    raster_dict["band_count"] = raster_dict.pop("count") # rename the key
+    raster_dict["bounds"] = dataset.bounds
+    if statistics:
+        band_stat_dict = {}
+        for i in range(1, raster_dict["band_count"] + 1):
+              # need time to do that
+            band_stat_dict[f"band_{i}"] = dataset.statistics(i, approx=approx)  
+        raster_dict["statistics"] = band_stat_dict
+        
+    resolution = (dataset.transform[0], dataset.transform[4])
+    raster_dict["resolution"] = resolution
+    # print("dataset.crs:", dataset.crs)
+
+    crs = dataset.crs
+
+    if crs:    
+        if dataset.crs.is_projected:
+            raster_dict["unit"] = dataset.crs.linear_units
+        else:
+            raster_dict["unit"] = "degree"
+    else: 
+        raster_dict["Coordinate reference system"] = "unknown"
+    # print("dataset.crs:", dataset.crs)
+    
+    raster_str = str(raster_dict)
+    return raster_str
 
 # beta vervsion of using structured output. # https://cookbook.openai.com/examples/structured_outputs_intro
 # https://platform.openai.com/docs/guides/structured-outputs/examples
