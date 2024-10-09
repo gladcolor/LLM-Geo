@@ -54,12 +54,12 @@ def get_data_overview(data_location_dict):
 
             if format_ in ["CSV"]:
                 meta_str = see_table(data_path)
-                
+
             if format_ in ["Tiff", "JPEG", "PNG", "ERDAS IMG"]:
-                meta_str = see_raster(data_path)    
+                meta_str = see_raster(data_path)
 
             data['meta_str'] = meta_str
-            
+
         except Exception as e:
             pass
     return data_location_dict
@@ -131,24 +131,39 @@ def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasteri
         band_stat_dict = {}
         for i in range(1, raster_dict["band_count"] + 1):
               # need time to do that
-            band_stat_dict[f"band_{i}"] = dataset.statistics(i, approx=approx)  
+            band_stat_dict[f"band_{i}"] = dataset.statistics(i, approx=approx)
         raster_dict["statistics"] = band_stat_dict
-        
+
+    resolution = (dataset.transform[0], dataset.transform[4])
+    raster_dict["resolution"] = resolution
+    # print("dataset.crs:", dataset.crs)
+
+def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasterio object
+    raster_dict = dataset.meta
+    raster_dict["band_count"] = raster_dict.pop("count") # rename the key
+    raster_dict["bounds"] = dataset.bounds
+    if statistics:
+        band_stat_dict = {}
+        for i in range(1, raster_dict["band_count"] + 1):
+              # need time to do that
+            band_stat_dict[f"band_{i}"] = dataset.statistics(i, approx=approx)
+        raster_dict["statistics"] = band_stat_dict
+
     resolution = (dataset.transform[0], dataset.transform[4])
     raster_dict["resolution"] = resolution
     # print("dataset.crs:", dataset.crs)
 
     crs = dataset.crs
 
-    if crs:    
+    if crs:
         if dataset.crs.is_projected:
             raster_dict["unit"] = dataset.crs.linear_units
         else:
             raster_dict["unit"] = "degree"
-    else: 
+    else:
         raster_dict["Coordinate reference system"] = "unknown"
     # print("dataset.crs:", dataset.crs)
-    
+
     raster_str = str(raster_dict)
     return raster_str
 
