@@ -123,6 +123,21 @@ def see_raster(file_path, statistics=False, approx=False):
 
     return raster_str
 
+# def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasterio object
+#     raster_dict = dataset.meta
+#     raster_dict["band_count"] = raster_dict.pop("count") # rename the key
+#     raster_dict["bounds"] = dataset.bounds
+#     if statistics:
+#         band_stat_dict = {}
+#         for i in range(1, raster_dict["band_count"] + 1):
+#               # need time to do that
+#             band_stat_dict[f"band_{i}"] = dataset.stats(i, approx=approx)
+#         raster_dict["statistics"] = band_stat_dict
+#
+#     resolution = (dataset.transform[0], dataset.transform[4])
+#     raster_dict["resolution"] = resolution
+#     # print("dataset.crs:", dataset.crs)
+
 def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasterio object
     raster_dict = dataset.meta
     raster_dict["band_count"] = raster_dict.pop("count") # rename the key
@@ -131,22 +146,7 @@ def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasteri
         band_stat_dict = {}
         for i in range(1, raster_dict["band_count"] + 1):
               # need time to do that
-            band_stat_dict[f"band_{i}"] = dataset.statistics(i, approx=approx)
-        raster_dict["statistics"] = band_stat_dict
-
-    resolution = (dataset.transform[0], dataset.transform[4])
-    raster_dict["resolution"] = resolution
-    # print("dataset.crs:", dataset.crs)
-
-def _get_raster_str(dataset, statistics=False, approx=False):  # receive rasterio object
-    raster_dict = dataset.meta
-    raster_dict["band_count"] = raster_dict.pop("count") # rename the key
-    raster_dict["bounds"] = dataset.bounds
-    if statistics:
-        band_stat_dict = {}
-        for i in range(1, raster_dict["band_count"] + 1):
-              # need time to do that
-            band_stat_dict[f"band_{i}"] = dataset.statistics(i, approx=approx)
+            band_stat_dict[f"band_{i}"] = dataset.stats(indexes=i, approx=approx)
         raster_dict["statistics"] = band_stat_dict
 
     resolution = (dataset.transform[0], dataset.transform[4])
