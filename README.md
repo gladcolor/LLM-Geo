@@ -112,3 +112,7 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 
 # Good news! We have developed another agent to download geospatial data autonomously:
 - There are two implementations: [Jupyter Notebook](https://github.com/gladcolor/LLM-Find/) and the [QGIS plugin](https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent). Please try them out!
+
+# For Developers
+- Our team is still developing LLM-Geo, and have added the data overview module, so that users do not need to add the needed fields in the data description. Please go to [develop](https://github.com/gladcolor/LLM-Geo/tree/develop) branch to test our experienmental features!
+
