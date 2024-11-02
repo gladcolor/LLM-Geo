@@ -99,11 +99,11 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 
 
 # To Do
-- Test with more case studies.
+- Test with more case studies(Working on it).
 - Improve the prompt generation.
-- Implement an autonomous data understanding module.
+- Implement an autonomous data understanding module (Done).
 - Implement an autonomous data visualization module. (Working on another cartograph agent)
-- Develop a web-based front-end user interface.
+- Develop a web-based front-end user interface (Working on it).
 - Integrate and evaluate the open source LLM Meta Llama 3 (8B and 70B) as an alternative reasoning core in LLM-Geo.
 
 # Note:
