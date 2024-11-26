@@ -2,9 +2,9 @@
 
 GIS stands for Geographic Information System; one of its major functionality is to conduct spatial analysis, manually, in the current stage. Large Language Models (LLMs), such as ChatGPT, demonstrate a strong understanding of human natural language and have been explored and applied in various fields, including reasoning, creative writing, code generation, translation, and information retrieval. 
 
-By adopting LLM as the reasoning core, we introduce Autonomous GIS, an AI-powered geographic information system (GIS) that leverages the LLM’s general abilities in natural language understanding, reasoning, and coding for addressing spatial problems with automatic spatial data collection, analysis and visualization. We envision that autonomous GIS will need to achieve five autonomous goals including **self-generating, self-organizing, self-verifying, self-executing, and self-growing**. We developed a prototype system called LLM-Geo using GPT-4 API in a Python environment, demonstrating what an autonomous GIS looks like and how it delivers expected results without human intervention using three case studies. 
+By adopting LLM as the reasoning core, we introduce Autonomous GIS, an AI-powered geographic information system (GIS) that leverages the LLM’s general abilities in natural language understanding, reasoning, and coding for addressing spatial problems with automatic spatial data collection, analysis and visualization. We envision that autonomous GIS will need to achieve five autonomous goals, including **self-generating, self-organizing, self-verifying, self-executing, and self-growing**. We developed a prototype system called LLM-Geo using GPT-4 API in a Python environment, demonstrating what an autonomous GIS looks like and how it delivers expected results without human intervention using three case studies. 
 
-For the case studies, LLM-Geo successfully returned accurate results, including aggregated numbers, graphs, and maps, significantly reducing manual operation time. Although still lacking several important modules such as logging and code testing, LLM-Geo demonstrates a potential path towards next-generation AI-powered GIS. We advocate for the GIScience community to dedicate more effort to the research and development of autonomous GIS, making spatial analysis easier, faster, and more accessible to a broader audience. 
+For the case studies, LLM-Geo successfully returned accurate results, including aggregated numbers, graphs, and maps, significantly reducing manual operation time. Although still lacking several important modules, such as logging and code testing, LLM-Geo demonstrates a potential path toward next-generation AI-powered GIS. We advocate for the GIScience community to dedicate more effort to the research and development of autonomous GIS, making spatial analysis easier, faster, and more accessible to a broader audience. 
 
 ![img_1.png](images/img_1.png)
 Overall workflow of LLM-Geo
@@ -28,7 +28,7 @@ If you have difficulties installing `GeoPandas` in Windows, refer to this [post]
 - Note that the solution based on graph, code review, and debug will cost a lot of tokens. We provide a Jupyter notebook [(Direct_request_LLM.ipynb)](https://github.com/gladcolor/LLM-Geo/blob/master/Direct_request_LLM.ipynb) to directly request solutions from LLM. This is a much more quick way to get solutions for simple tasks/questions, but its robustness may be slightly lower.
 
 # Case studies
-These case studies are designed to show the concepts of autonomous GIS. Please use GPT-4; the lower version of GPT will fail to generate the correct code and results. Note every time GPT-4 generates different outputs, your results may look different. Per our test, the generated program may not succeed every time, but there is about an 80% chance to run successfully. If input the generated prompts to the ChatGPT-4 chat box rather than API, the success rate will be much higher. We will improve the overall workflow of LLM-Geo, currently we do not push the entire historical conversation (i.e., sufficient information) to the GPT-4 API.
+These case studies are designed to show the concepts of autonomous GIS. Please use GPT-4; the lower version of GPT will fail to generate the correct code and results. Note every time GPT-4 generates different outputs, your results may look different. Per our test, the generated program may not succeed every time, but there is about an 80% chance to run successfully. If you input the generated prompts to the ChatGPT-4 chat box rather than API, the success rate will be much higher. We will improve the overall workflow of LLM-Geo, currently we do not push the entire historical conversation (i.e., sufficient information) to the GPT-4 API.
 
 Video demonstrations for the case studies
 
@@ -92,7 +92,7 @@ The results are: (a) Solution graph, (b) county level death rate map of the cont
 # Program architecture
 Understand the architecture of LLM-Geo might help you customize it or develop you own autonomous GIS agents; [here](Architecture_LLM_Geo.pdf) is a brief introduction of the architecture.
 
-# Relavant Projects
+# Relevant Projects
 - An autonomous GIS agent framework for geospatial data retrieval https://github.com/gladcolor/LLM-Find
 https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 - Test the integration of LLM-Geo with QGIS. https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
@@ -113,6 +113,10 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 # Good news! We have developed another agent to download geospatial data autonomously:
 - There are two implementations: [Jupyter Notebook](https://github.com/gladcolor/LLM-Find/) and the [QGIS plugin](https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent). Please try them out!
 
+# Good news 2! We have developed a QGIS plugin for spatial analysis:
+- The QGIS plugin is [here](https://plugins.qgis.org/plugins/SpatialAnalysisAgent-master/#plugin-versions). 
+- The code is [here](https://github.com/Teakinboyewa/SpatialAnalysisAgent). Please watch the video and try it out!
+
 # For Developers
-- Our team is still developing LLM-Geo, and have added the data overview module, so that users do not need to specify the names of the needed fields in the data or task description. Please go to [develop](https://github.com/gladcolor/LLM-Geo/tree/develop) branch to test our experienmental features!
+- Our team is still developing LLM-Geo and has added the data overview module so that users do not need to specify the names of the needed fields in the data or task description. Please go to the [develop](https://github.com/gladcolor/LLM-Geo/tree/develop) branch to test our experimental features!
 
