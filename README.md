@@ -119,4 +119,4 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 
 # For Developers
 - Our team is still developing LLM-Geo and has added the data overview module so that users do not need to specify the names of the needed fields in the data or task description. Please go to the [develop](https://github.com/gladcolor/LLM-Geo/tree/develop) branch to test our experimental features!
-
+- We just tested Deepseek R1 distilled 70B, and found that it can generate the solution graph! We encourage developers to conduct more tests!
