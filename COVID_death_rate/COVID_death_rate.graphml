@@ -1,11 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
-  <key id="d8" for="node" attr.name="regression_line_color" attr.type="string" />
-  <key id="d7" for="node" attr.name="transparency" attr.type="string" />
-  <key id="d6" for="node" attr.name="figure_size" attr.type="string" />
-  <key id="d5" for="node" attr.name="color_scheme" attr.type="string" />
-  <key id="d4" for="node" attr.name="map_size" attr.type="string" />
-  <key id="d3" for="node" attr.name="map_projection" attr.type="string" />
   <key id="d2" for="node" attr.name="description" attr.type="string" />
   <key id="d1" for="node" attr.name="data_path" attr.type="string" />
   <key id="d0" for="node" attr.name="node_type" attr.type="string" />
@@ -13,85 +7,118 @@
     <node id="covid_data_url">
       <data key="d0">data</data>
       <data key="d1">https://github.com/nytimes/covid-19-data/raw/master/us-counties-2020.csv</data>
-      <data key="d2">URL for COVID-19 data case in 2020 (county-level)</data>
+      <data key="d2">URL for COVID-19 case data 2020</data>
     </node>
-    <node id="county_boundary_url">
+    <node id="load_covid_data">
+      <data key="d0">operation</data>
+      <data key="d2">Load COVID-19 case data for 2020</data>
+    </node>
+    <node id="covid_case_data">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">Loaded COVID-19 case data for 2020</data>
+    </node>
+    <node id="county_shapefile_url">
       <data key="d0">data</data>
       <data key="d1">https://github.com/gladcolor/spatial_data/raw/master/contiguous_counties.zip</data>
-      <data key="d2">URL for Contiguous US county boundary (ESRI shapefile)</data>
+      <data key="d2">URL for contiguous US county boundaries shapefile</data>
+    </node>
+    <node id="load_county_shapefile">
+      <data key="d0">operation</data>
+      <data key="d2">Load county boundary shapefile</data>
+    </node>
+    <node id="county_boundaries_gdf">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">GeoDataFrame of county boundaries</data>
     </node>
     <node id="census_data_url">
       <data key="d0">data</data>
       <data key="d1">https://raw.githubusercontent.com/gladcolor/spatial_data/master/Demography/ACS2020_5year_county.csv</data>
-      <data key="d2">URL for Census data (ACS2020)</data>
-    </node>
-    <node id="load_covid_data">
-      <data key="d0">operation</data>
-      <data key="d2">Load COVID-19 county-level data</data>
-    </node>
-    <node id="load_county_boundary">
-      <data key="d0">operation</data>
-      <data key="d2">Load Contiguous US county boundary shapefile</data>
+      <data key="d2">URL for Census ACS2020 data</data>
     </node>
     <node id="load_census_data">
       <data key="d0">operation</data>
-      <data key="d2">Load census data</data>
+      <data key="d2">Load Census ACS2020 data</data>
     </node>
-    <node id="covid_gdf">
+    <node id="census_data">
       <data key="d0">data</data>
-      <data key="d2">COVID-19 GeoDataFrame</data>
+      <data key="d1" />
+      <data key="d2">Loaded Census ACS2020 data</data>
     </node>
-    <node id="county_boundary_gdf">
-      <data key="d0">data</data>
-      <data key="d2">County boundary GeoDataFrame</data>
-    </node>
-    <node id="census_df">
-      <data key="d0">data</data>
-      <data key="d2">Census DataFrame</data>
-    </node>
-    <node id="calculate_death_rate">
+    <node id="compute_death_rate">
       <data key="d0">operation</data>
-      <data key="d2">Calculate COVID-19 death rate for each county</data>
+      <data key="d2">Compute death rate per county from COVID data</data>
     </node>
-    <node id="join_county_covid">
-      <data key="d0">operation</data>
-      <data key="d2">Join COVID-19 data with county boundary geo data</data>
-    </node>
-    <node id="join_census_data">
-      <data key="d0">operation</data>
-      <data key="d2">Join census data with COVID-19 and county data</data>
-    </node>
-    <node id="final_gdf">
+    <node id="death_rate_data">
       <data key="d0">data</data>
-      <data key="d2">GeoDataFrame with all joined data</data>
+      <data key="d1" />
+      <data key="d2">Data containing death rates per county</data>
+    </node>
+    <node id="join_death_rate_boundaries">
+      <data key="d0">operation</data>
+      <data key="d2">Join COVID death rate data with county boundaries</data>
+    </node>
+    <node id="death_rate_map_data">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">GeoDataFrame of counties annotated with death rates</data>
     </node>
     <node id="draw_choropleth_map">
       <data key="d0">operation</data>
-      <data key="d2">Draw a choropleth map showing COVID-19 death rate among counties</data>
-      <data key="d3">Conus Albers</data>
-      <data key="d4">15x10 inches</data>
-      <data key="d5">quantiles</data>
+      <data key="d2">Draw choropleth map to show death rate using 'quantiles' scheme and 'Conus Albers' projection</data>
+    </node>
+    <node id="choropleth_map">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">Choropleth map visualizing the death rate of COVID-19 among US counties</data>
+    </node>
+    <node id="calculate_senior_rate">
+      <data key="d0">operation</data>
+      <data key="d2">Calculate senior (65 and over) resident rate per county from census data</data>
+    </node>
+    <node id="senior_rate_data">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">Data containing senior resident rate per county</data>
+    </node>
+    <node id="merge_death_senior_rate">
+      <data key="d0">operation</data>
+      <data key="d2">Merge death rate data with senior resident rate data</data>
+    </node>
+    <node id="merged_data">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">Merged data containing death rates and senior resident rates</data>
     </node>
     <node id="draw_scatter_plot">
       <data key="d0">operation</data>
-      <data key="d2">Draw a scatter plot to show correlation between death rate and senior resident rate</data>
-      <data key="d6">15x10 inches</data>
-      <data key="d7">50%</data>
-      <data key="d8">red</data>
+      <data key="d2">Draw scatter plot for correlation of death rate with senior rate, including r-square and p-value</data>
+    </node>
+    <node id="scatter_plot">
+      <data key="d0">data</data>
+      <data key="d1" />
+      <data key="d2">Scatter plot showing correlation and trend line of death rate with senior resident rate</data>
     </node>
     <edge source="covid_data_url" target="load_covid_data" />
-    <edge source="county_boundary_url" target="load_county_boundary" />
+    <edge source="load_covid_data" target="covid_case_data" />
+    <edge source="covid_case_data" target="compute_death_rate" />
+    <edge source="county_shapefile_url" target="load_county_shapefile" />
+    <edge source="load_county_shapefile" target="county_boundaries_gdf" />
+    <edge source="county_boundaries_gdf" target="join_death_rate_boundaries" />
     <edge source="census_data_url" target="load_census_data" />
-    <edge source="load_covid_data" target="covid_gdf" />
-    <edge source="load_county_boundary" target="county_boundary_gdf" />
-    <edge source="load_census_data" target="census_df" />
-    <edge source="covid_gdf" target="calculate_death_rate" />
-    <edge source="county_boundary_gdf" target="join_county_covid" />
-    <edge source="census_df" target="join_census_data" />
-    <edge source="calculate_death_rate" target="join_county_covid" />
-    <edge source="join_county_covid" target="join_census_data" />
-    <edge source="join_census_data" target="final_gdf" />
-    <edge source="final_gdf" target="draw_choropleth_map" />
-    <edge source="final_gdf" target="draw_scatter_plot" />
+    <edge source="load_census_data" target="census_data" />
+    <edge source="census_data" target="calculate_senior_rate" />
+    <edge source="compute_death_rate" target="death_rate_data" />
+    <edge source="death_rate_data" target="join_death_rate_boundaries" />
+    <edge source="death_rate_data" target="merge_death_senior_rate" />
+    <edge source="join_death_rate_boundaries" target="death_rate_map_data" />
+    <edge source="death_rate_map_data" target="draw_choropleth_map" />
+    <edge source="draw_choropleth_map" target="choropleth_map" />
+    <edge source="calculate_senior_rate" target="senior_rate_data" />
+    <edge source="senior_rate_data" target="merge_death_senior_rate" />
+    <edge source="merge_death_senior_rate" target="merged_data" />
+    <edge source="merged_data" target="draw_scatter_plot" />
+    <edge source="draw_scatter_plot" target="scatter_plot" />
   </graph>
 </graphml>
