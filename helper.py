@@ -291,7 +291,7 @@ def show_graph(G):
                 cdn_resources="remote",
                 directed=True,
                 # bgcolor="#222222",
-                # font_color="white",
+                # font_color="white",                
                 height="800px",
                 # width="100%",             
                 #  select_menu=True,
@@ -330,6 +330,7 @@ def show_graph(G):
         # nt.nodes[i]['shape'] = 'box'
         nt.nodes[i]['shape'] = 'dot'
         # nt.set_node_style(node, shape="box")
+        nt.nodes[i]['font'] = {'size': 20}  # set font size 
          
     return nt
 
