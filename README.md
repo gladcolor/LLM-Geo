@@ -47,8 +47,8 @@ Task:
 
 Data locations: 
 1. NC hazardous waste facility ESRI shape file location: https://github.com/gladcolor/LLM- Geo/raw/master/overlay_analysis/Hazardous_Waste_Sites.zip
-2. NC tract boundary shapefile location: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_shp_37.zip. The tract id column is 'Tract'.
-3. NC tract population CSV file location: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv. The population is stored in the 'TotalPopulation' column. The tract ID column is 'GEOID'
+2. NC tract boundary shapefile location: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_shp_37.zip. 
+3. NC tract population CSV file location: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv. 
 ```
 The results are: (a) Solution graph, (b) assembly program (Python codes), and (c) returned population count and generated map. 
 ![img_2.png](images/img_2.png)
@@ -83,7 +83,7 @@ Task:
 Data locations:
 1) COVID-19 data case in 2020 (county-level): https://github.com/nytimes/covid-19-data/raw/master/us-counties-2020.csv. This data is for daily accumulated COVID cases and deaths for each county in the US. There are 5 columns: date (format: 2021-02-01), county, state, fips, cases, deaths. 
 2) Contiguous US county boundary (ESRI shapefile): https://github.com/gladcolor/spatial_data/raw/master/contiguous_counties.zip. The county FIPS column is 'GEOID'.
-3) Census data (ACS2020): https://raw.githubusercontent.com/gladcolor/spatial_data/master/Demography/ACS2020_5year_county.csv. The needed columns are: 'FIPS', 'Total Population', 'Total Population: 65 to 74 Years', 'Total Population: 75 to 84 Years', 'Total Population: 85 Years and Over'.
+3) Census data (ACS2020): https://raw.githubusercontent.com/gladcolor/spatial_data/master/Demography/ACS2020_5year_county.csv. 
 
 ```
 The results are: (a) Solution graph, (b) county level death rate map of the contiguous US, (c) scatter plot showing the association between COVID-19 death rate and the senior resident rate at the county level, (d) assembly program.  
@@ -104,7 +104,7 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 - Implement an autonomous data understanding module (Done).
 - Implement an autonomous data visualization module. (Working on another cartograph agent)
 - Develop a web-based front-end user interface (Working on it).
-- Integrate and evaluate the open source LLM Meta Llama 3 (8B and 70B) as an alternative reasoning core in LLM-Geo.
+
 
 # Note:
 
@@ -120,3 +120,6 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 # For Developers
 - Our team is still developing LLM-Geo and has added the data overview module so that users do not need to specify the names of the needed fields in the data or task description. Please go to the [develop](https://github.com/gladcolor/LLM-Geo/tree/develop) branch to test our experimental features!
 - We just tested Deepseek R1 distilled 70B, and found that it can generate the solution graph! We encourage developers to conduct more tests!
+
+# Change log
+- 2025-02-09. Using o3-mini as the default model. Note that it need >10 seconds for reasoning before returning tokens. 
