@@ -15,7 +15,9 @@ Note:  We are still developing LLM-Geo, and the ideas presented in the paper may
 
 # Installation
 
-Clone or download the repository, rename `your_config.ini` as `config.ini`. Then, put your OpenAI API key in the `config.ini` file. Please use GPT-4, the lower versions such as 3.5 do no have enough reasoning ability to generate correct solution graph and operation code. Till Dec. 26, "o1" models do not have the full features of "gpt-4o" models, such as "system prompt", so LLM-Geo uses "gpt-4o".
+Clone or download the repository, rename `your_config.ini` as `config.ini`. Then, put your OpenAI API key in the `config.ini` file. Please use GPT-4 or higher, the lower versions such as 3.5 do no have enough reasoning ability to generate correct solution graph and operation code. 
+
+For open-source LLMs, per our tests, small and quantized models, such as Gemma-4-31b-it Q4, are still unable to generate a complete runnable program. However, the gap is marginal; we estimate a large model using a 48 GB GPU memory, plus a web-search tool, may be able to accomplish a few cases in this repository. Note that the LLM-Geo requires more than 10,000 tokens of context length. (2026.04.05)  
 
 If you have difficulties installing `GeoPandas` in Windows, refer to this [post](https://geoffboeing.com/2014/09/using-geopandas-windows/). 
 
@@ -122,4 +124,5 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 - We just tested Deepseek R1 distilled 70B, and found that it can generate the solution graph! We encourage developers to conduct more tests!
 
 # Change log
-- 2025-02-09. Using o3-mini as the default model. Note that it need >10 seconds for reasoning before returning tokens. 
+- 2026-04-05. Per our test, the open-source LLM Gemma-4-31b-it-Q4 can generate the geoprocessing workflow (i.g, solution graph), operations, and an ensemble program, but still has difficulties writing the correct program. We do not have a great GPU except a 24GB 3090, and are not able to test a large model. Will test a larger one using Google Colab and other cloud GPU providers later.
+- 2025-02-09. Using o3-mini as the default model. Note that it needs>10 seconds for reasoning before returning tokens. 
