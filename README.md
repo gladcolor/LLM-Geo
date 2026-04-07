@@ -121,8 +121,7 @@ https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
 
 # For Developers
 - Our team is still developing LLM-Geo and has added the data overview module so that users do not need to specify the names of the needed fields in the data or task description. Please go to the [develop](https://github.com/gladcolor/LLM-Geo/tree/develop) branch to test our experimental features!
-- We just tested Deepseek R1 distilled 70B, and found that it can generate the solution graph! We encourage developers to conduct more tests!
-
+ 
 # Change log
-- 2026-04-05. Per our test, the open-source LLM Gemma-4-31b-it-Q4 can generate the geoprocessing workflow (i.g, solution graph), operations, and an ensemble program, but still has difficulties writing the correct program. We do not have a great GPU except a 24GB 3090, and are not able to test a large model. Will test a larger one using Google Colab and other cloud GPU providers later.
+- 2026-04-05. Per our test, the open-source LLM Gemma-4-31b-it-Q4 can generate the geoprocessing workflow (i.g, solution graph), operations, and an ensemble program, and occasionally get the results correct under the `think` mode! We do not have a great GPU except a 24GB 3090, and are not able to test a large model. Each test case may need about 30 miniutes to accomplish.    
 - 2025-02-09. Using o3-mini as the default model. Note that it needs>10 seconds for reasoning before returning tokens. 
