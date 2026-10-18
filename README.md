@@ -97,7 +97,7 @@ Understand the architecture of LLM-Geo might help you customize it or develop yo
 # Relevant Projects
 - An autonomous GIS agent framework for geospatial data retrieval https://github.com/gladcolor/LLM-Find
 https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
-- Test the integration of LLM-Geo with QGIS. https://github.com/Teakinboyewa/AutonomousGIS_GeodataRetrieverAgent
+- Test the integration of LLM-Geo with QGIS. https://github.com/Teakinboyewa/SpatialAnalysisAgent
 
 
 # To Do
